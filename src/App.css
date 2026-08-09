@@ -1,0 +1,13 @@
+.app {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.app__title {
+  margin: 0;
+  font-size: clamp(2rem, 8vw, 5rem);
+  line-height: 1.1;
+}
