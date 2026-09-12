@@ -1,14 +1,7 @@
-import Layout from "@components/Layout";
 import { APP_NAME } from "@constants/app";
 
-import "./HomePage.css";
-
-function HomePage() {
-  return (
-    <Layout>
-      <h1 className="home-page__title">{APP_NAME}</h1>
-    </Layout>
-  );
+export function Component() {
+  return <h1 className="display-1 fw-bold m-0">{APP_NAME}</h1>;
 }
 
-export default HomePage;
+Component.displayName = "HomePage";

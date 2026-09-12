@@ -1,29 +1,15 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
+/*
+ * Project-wide styles layered on top of Bootstrap Reboot.
+ *
+ * Bootstrap already resets box sizing and margins, normalises form control
+ * typography, and sets the base font stack, so only rules it does not cover
+ * belong here.
+ */
 html {
   color-scheme: light dark;
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
 }
 
 body {
-  margin: 0;
   min-width: 320px;
   min-height: 100vh;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
 }

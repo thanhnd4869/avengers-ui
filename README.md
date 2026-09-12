@@ -5,6 +5,8 @@ A React 19 user interface built with JavaScript, Webpack 5, and Babel.
 ## Technology Stack
 
 - React 19 and React DOM
+- React Router for client-side routing
+- Bootstrap 5 with React Bootstrap as the only UI library
 - JavaScript and JSX
 - Webpack 5 and Webpack Dev Server
 - Babel 8
@@ -117,6 +119,7 @@ what kind of code lives here?
 | ------------- | ------------------------------------------------------------------- |
 | `components/` | Reusable presentational components shared across pages.             |
 | `pages/`      | One component per screen. Composes components into a full view.     |
+| `routes/`     | Route definitions and the path constants they are built from.       |
 | `hooks/`      | Reusable custom React hooks.                                        |
 | `services/`   | Communication with external systems, mainly HTTP requests.          |
 | `utils/`      | Pure helper functions with no React or network dependency.          |
@@ -133,9 +136,11 @@ track empty directories. Delete that file once the folder has real content.
   ```text
   components/Layout/
   ├── Layout.jsx     the component
-  ├── Layout.css     styles it owns
   └── index.js       public entry point
   ```
+
+  A `Layout.css` file joins the folder only when Bootstrap classes cannot express
+  the styling.
 
   Grouping this way keeps a component and everything it owns together, so adding
   a test or a sub-component later does not clutter the parent folder.
@@ -149,8 +154,20 @@ track empty directories. Delete that file once the folder has real content.
   This keeps import paths short and marks the folder boundary: anything not
   re-exported is internal and should not be imported from outside the folder.
 
-- One component per file, using a default export.
-- CSS class names follow the BEM pattern, scoped by the component name.
+- One component per file. Components in `components/` use a default export, while
+  pages export a named `Component`, which is the shape the router's `lazy` option
+  expects:
+
+  ```jsx
+  export function Component() { ... }
+  Component.displayName = "HomePage";
+  ```
+
+  `displayName` is set so React DevTools and error messages show the page name
+  instead of the generic `Component`.
+
+- Styling uses Bootstrap classes. Any custom class added alongside them follows
+  the BEM pattern, scoped by the component name.
 - Layers that hold plain modules, such as `hooks/` and `utils/`, keep their files
   flat because they have no companion files to group.
 - `pages/` may import from every other folder. `components/`, `hooks/`,
@@ -187,6 +204,7 @@ of by a relative path such as `../../components/Layout`.
 | `@constants/`  | `src/constants/`  |
 | `@hooks/`      | `src/hooks/`      |
 | `@pages/`      | `src/pages/`      |
+| `@routes/`     | `src/routes/`     |
 | `@services/`   | `src/services/`   |
 | `@utils/`      | `src/utils/`      |
 
@@ -220,19 +238,26 @@ avengers-ui/
 │   └── index.html
 ├── src/
 │   ├── components/
-│   │   └── Layout/
+│   │   ├── Layout/
+│   │   │   ├── index.js
+│   │   │   └── Layout.jsx
+│   │   └── PageLoader/
 │   │       ├── index.js
-│   │       ├── Layout.css
-│   │       └── Layout.jsx
+│   │       └── PageLoader.jsx
 │   ├── constants/
 │   │   └── app.js
 │   ├── hooks/
 │   │   └── .gitkeep
 │   ├── pages/
-│   │   └── HomePage/
-│   │       ├── HomePage.css
-│   │       ├── HomePage.jsx
-│   │       └── index.js
+│   │   ├── HomePage/
+│   │   │   ├── HomePage.jsx
+│   │   │   └── index.js
+│   │   └── NotFoundPage/
+│   │       ├── index.js
+│   │       └── NotFoundPage.jsx
+│   ├── routes/
+│   │   ├── index.jsx
+│   │   └── paths.js
 │   ├── services/
 │   │   └── .gitkeep
 │   ├── utils/
@@ -250,6 +275,103 @@ avengers-ui/
 └── webpack.config.js
 ```
 
+## Styling
+
+Bootstrap 5 is the only UI library in the project, used through two packages:
+`bootstrap` for the stylesheet and `react-bootstrap` for its React components. No
+other component or styling library may be added, so interface work uses Bootstrap
+components and classes first, and falls back to a small amount of custom CSS only
+when Bootstrap has no equivalent.
+
+Bootstrap is imported once in `src/index.jsx`, before `src/index.css`, so project
+styles can override it:
+
+```jsx
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
+```
+
+Only the stylesheet is taken from the `bootstrap` package. Its JavaScript plugins
+are not used: they manipulate the DOM directly, which conflicts with how React
+owns it and causes bugs such as dropdowns stuck open. Bootstrap documents this
+limitation and points React projects to React Bootstrap, which reimplements the
+same behaviour as React components.
+
+The two packages are not competing libraries. React Bootstrap ships no CSS at
+all, so it depends on the `bootstrap` stylesheet for every visual style:
+
+| Package           | Provides                    |
+| ----------------- | --------------------------- |
+| `bootstrap`       | The stylesheet              |
+| `react-bootstrap` | React components, no styles |
+
+Import components individually so the bundle only includes what is used:
+
+```jsx
+import Button from "react-bootstrap/Button";
+```
+
+Use the `as` prop to keep Bootstrap styling while rendering a different element,
+which is how a router link becomes a button:
+
+```jsx
+<Button as={Link} to={PATHS.HOME} variant="primary">
+  Back to home
+</Button>
+```
+
+Bootstrap Reboot already handles the CSS reset, so `src/index.css` holds only the
+few rules Reboot does not cover.
+
+## Routing
+
+Routing uses the `react-router` package. Note that `react-router-dom` is not
+used: since version 7 it only re-exports `react-router`, and it has not followed
+the move to version 8.
+
+Routes live in `src/routes/index.jsx` and are built from the path constants in
+`src/routes/paths.js`, so a URL is written once and referenced everywhere else:
+
+```jsx
+import { PATHS } from "@routes/paths";
+
+<Link to={PATHS.HOME}>Back to home</Link>;
+```
+
+| Path         | Page                      |
+| ------------ | ------------------------- |
+| `/`          | `HomePage`                |
+| `/not-found` | `NotFoundPage`            |
+| `*`          | Redirects to `/not-found` |
+
+`Layout` is the parent route and renders the active page through `<Outlet />`,
+which keeps the shell mounted while only the page below it changes. Pages
+therefore render their own content and must not wrap themselves in `Layout`.
+
+The catch-all route redirects with `replace`, so an unknown URL does not stay in
+the history stack and the browser back button returns to the previous real page.
+
+Deep links such as `/not-found` work in development because
+`devServer.historyApiFallback` serves `index.html` for unknown paths. A
+production host must be configured to do the same.
+
+Pages are attached with the router's `lazy` option rather than imported directly,
+so each one is emitted as its own chunk and downloaded only when its route is
+visited:
+
+```jsx
+{ path: PATHS.HOME, lazy: () => import("@pages/HomePage") }
+```
+
+`lazy` merges the resolved module's exports into the route object, so a page that
+exports a named `Component` needs no further wiring. `HydrateFallback` renders
+`PageLoader` while the first page chunk is still loading.
+
+This project runs React Router in data mode, where routes are declared through
+`createBrowserRouter`. The framework mode documented on the React Router site
+declares routes in a `routes.ts` file and requires its own Vite plugin, which
+does not apply to this Webpack setup.
+
 ## Production Build
 
 Create an optimized build:
@@ -258,4 +380,30 @@ Create an optimized build:
 npm run build
 ```
 
-Webpack writes the output to `build/`, cleans stale files, generates source maps, and uses content-hashed JavaScript filenames for long-term caching.
+Webpack writes the output to `build/`, cleans stale files, generates source maps,
+and uses content-hashed filenames for long-term caching.
+
+The build is split so the browser downloads and caches as little as possible:
+
+| Output        | Contents                                         |
+| ------------- | ------------------------------------------------ |
+| `runtime.js`  | Webpack runtime, isolated so it can change alone |
+| `vendors.js`  | Third-party packages                             |
+| `main.js`     | Application code                                 |
+| `<id>.js`     | One chunk per lazily loaded page                 |
+| `vendors.css` | Bootstrap stylesheet                             |
+| `main.css`    | Project stylesheet                               |
+
+CSS is extracted into real stylesheets by `mini-css-extract-plugin` instead of
+being injected by JavaScript. The browser can then download CSS and JavaScript in
+parallel, styles are cached separately from application code, and the page no
+longer renders unstyled while the bundle loads. `style-loader` is still used in
+development because it supports hot reloading.
+
+Stylesheets are minified by `css-minimizer-webpack-plugin`. It is registered
+alongside `"..."` in `optimization.minimizer`, which preserves the default
+JavaScript minifier that would otherwise be replaced.
+
+Because application code, dependencies, and pages are hashed independently,
+editing a page invalidates only that page's chunk and leaves the cached vendor
+and stylesheet files untouched.

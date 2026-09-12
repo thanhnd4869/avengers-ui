@@ -10,6 +10,8 @@
       "@constants/*": ["./src/constants/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@pages/*": ["./src/pages/*"],
+      "@routes": ["./src/routes/index.jsx"],
+      "@routes/*": ["./src/routes/*"],
       "@services/*": ["./src/services/*"],
       "@utils/*": ["./src/utils/*"]
     }

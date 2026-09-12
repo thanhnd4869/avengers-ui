@@ -1,8 +1,10 @@
 const path = require("path");
 const { existsSync } = require("fs");
 const { loadEnvFile } = require("process");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const envPath = path.resolve(__dirname, ".env");
 
@@ -40,12 +42,12 @@ module.exports = (_, argv) => {
     },
     resolve: {
       extensions: [".js", ".jsx"],
-      // Keep these in sync with the "paths" entries in jsconfig.json.
       alias: {
         "@components": path.resolve(__dirname, "src/components"),
         "@constants": path.resolve(__dirname, "src/constants"),
         "@hooks": path.resolve(__dirname, "src/hooks"),
         "@pages": path.resolve(__dirname, "src/pages"),
+        "@routes": path.resolve(__dirname, "src/routes"),
         "@services": path.resolve(__dirname, "src/services"),
         "@utils": path.resolve(__dirname, "src/utils"),
       },
@@ -60,7 +62,7 @@ module.exports = (_, argv) => {
         },
         {
           test: /\.css$/i,
-          use: ["style-loader", "css-loader"],
+          use: [isProduction ? MiniCssExtractPlugin.loader : "style-loader", "css-loader"],
         },
       ],
     },
@@ -75,7 +77,28 @@ module.exports = (_, argv) => {
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, "public/index.html"),
       }),
-    ],
+      isProduction &&
+        new MiniCssExtractPlugin({
+          filename: "static/css/[name].[contenthash:8].css",
+        }),
+    ].filter(Boolean),
+    optimization: {
+      runtimeChunk: "single",
+      splitChunks: {
+        chunks: "all",
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: "vendors",
+          },
+        },
+      },
+      minimizer: [
+        // Keeps the default JavaScript minifier.
+        "...",
+        new CssMinimizerPlugin(),
+      ],
+    },
     performance: {
       hints: isProduction ? "warning" : false,
     },

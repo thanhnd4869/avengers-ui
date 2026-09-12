@@ -1,9 +1,15 @@
-import "./Layout.css";
+import Container from "react-bootstrap/Container";
+import { Outlet } from "react-router";
 
-function Layout({ children }) {
+function Layout() {
   return (
-    <div className="layout">
-      <main className="layout__content">{children}</main>
+    <div className="d-flex flex-column min-vh-100">
+      <Container
+        as="main"
+        className="flex-grow-1 d-flex align-items-center justify-content-center text-center py-4"
+      >
+        <Outlet />
+      </Container>
     </div>
   );
 }
