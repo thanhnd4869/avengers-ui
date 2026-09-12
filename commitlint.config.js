@@ -8,11 +8,11 @@ module.exports = {
           const isValid = /^[\x20-\x7E]+$/.test(message);
 
           return [isValid, "commit message must contain one line using English ASCII characters"];
-        }
-      }
-    }
+        },
+      },
+    },
   ],
   rules: {
-    "single-line-ascii": [2, "always"]
-  }
+    "single-line-ascii": [2, "always"],
+  },
 };

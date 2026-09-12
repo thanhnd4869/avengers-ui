@@ -9,7 +9,7 @@ A React 19 user interface built with JavaScript, Webpack 5, and Babel.
 - Webpack 5 and Webpack Dev Server
 - Babel 8
 - CSS with `style-loader` and `css-loader`
-- ESLint 10 with React Hooks rules
+- ESLint 9 with React and React Hooks rules
 - Prettier
 - Husky and lint-staged
 - Commitlint with Conventional Commits

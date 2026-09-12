@@ -17,29 +17,29 @@ module.exports = (_, argv) => {
 
   return {
     dotenv: {
-      prefix: "WEBPACK_"
+      prefix: "WEBPACK_",
     },
     entry: path.resolve(__dirname, "src/index.jsx"),
     output: {
       path: path.resolve(__dirname, "build"),
       filename: isProduction ? "static/js/[name].[contenthash:8].js" : "static/js/[name].js",
       clean: true,
-      publicPath: "/"
+      publicPath: "/",
     },
     devtool: isProduction ? "source-map" : "eval-cheap-module-source-map",
     devServer: {
       static: {
-        directory: path.resolve(__dirname, "public")
+        directory: path.resolve(__dirname, "public"),
       },
       compress: true,
       historyApiFallback: true,
       hot: true,
       open: true,
       host: devServerHost,
-      port: Number.isInteger(devServerPort) ? devServerPort : 3000
+      port: Number.isInteger(devServerPort) ? devServerPort : 3000,
     },
     resolve: {
-      extensions: [".js", ".jsx"]
+      extensions: [".js", ".jsx"],
     },
     module: {
       rules: [
@@ -47,13 +47,13 @@ module.exports = (_, argv) => {
           test: /\.[jt]sx?$/,
           exclude: /node_modules/,
           type: "javascript/auto",
-          use: "babel-loader"
+          use: "babel-loader",
         },
         {
           test: /\.css$/i,
-          use: ["style-loader", "css-loader"]
-        }
-      ]
+          use: ["style-loader", "css-loader"],
+        },
+      ],
     },
     plugins: [
       new ESLintPlugin({
@@ -61,14 +61,14 @@ module.exports = (_, argv) => {
         extensions: ["js", "jsx"],
         emitError: true,
         emitWarning: true,
-        failOnError: true
+        failOnError: true,
       }),
       new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, "public/index.html")
-      })
+        template: path.resolve(__dirname, "public/index.html"),
+      }),
     ],
     performance: {
-      hints: isProduction ? "warning" : false
-    }
+      hints: isProduction ? "warning" : false,
+    },
   };
 };
