@@ -40,6 +40,15 @@ module.exports = (_, argv) => {
     },
     resolve: {
       extensions: [".js", ".jsx"],
+      // Keep these in sync with the "paths" entries in jsconfig.json.
+      alias: {
+        "@components": path.resolve(__dirname, "src/components"),
+        "@constants": path.resolve(__dirname, "src/constants"),
+        "@hooks": path.resolve(__dirname, "src/hooks"),
+        "@pages": path.resolve(__dirname, "src/pages"),
+        "@services": path.resolve(__dirname, "src/services"),
+        "@utils": path.resolve(__dirname, "src/utils"),
+      },
     },
     module: {
       rules: [

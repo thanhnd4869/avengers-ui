@@ -1,11 +1,7 @@
-import "./App.css";
+import HomePage from "@pages/HomePage";
 
 function App() {
-  return (
-    <main className="app">
-      <h1 className="app__title">{process.env.WEBPACK_APP_NAME}</h1>
-    </main>
-  );
+  return <HomePage />;
 }
 
 export default App;

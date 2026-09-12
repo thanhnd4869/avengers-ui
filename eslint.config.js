@@ -68,6 +68,9 @@ module.exports = [
     rules: {
       ...reactHooks.configs.recommended.rules,
       "jsx-filename/jsx-extension": "error",
+      // React 19 removed runtime propTypes checking, so declaring propTypes is
+      // dead code. Disabled deliberately rather than worked around per file.
+      "react/prop-types": "off",
     },
   },
   {

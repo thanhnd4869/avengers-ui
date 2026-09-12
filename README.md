@@ -79,8 +79,12 @@ All scripts are designed to run on Windows, macOS, and Linux.
 
 - Use `.jsx` for files containing JSX or React UI components.
 - Use `.js` for JavaScript files that do not contain JSX.
+- Import across layers through their alias, and use a relative path only for
+  files that sit in the same folder.
 - ESLint runs during Webpack compilation. Lint errors fail the compilation and appear in the terminal and development overlay.
 - Prettier handles code formatting.
+- `react/prop-types` is disabled because React 19 removed runtime prop type
+  checking, which makes `propTypes` declarations dead code.
 
 ## Git Hooks and Commit Messages
 
@@ -103,6 +107,111 @@ fix(webpack): resolve development overlay issue
 docs: update setup instructions
 ```
 
+## Architecture
+
+The project uses a **layer-based** architecture. Files are grouped by their
+technical role, so each top-level folder under `src/` answers a single question:
+what kind of code lives here?
+
+| Folder        | Contains                                                            |
+| ------------- | ------------------------------------------------------------------- |
+| `components/` | Reusable presentational components shared across pages.             |
+| `pages/`      | One component per screen. Composes components into a full view.     |
+| `hooks/`      | Reusable custom React hooks.                                        |
+| `services/`   | Communication with external systems, mainly HTTP requests.          |
+| `utils/`      | Pure helper functions with no React or network dependency.          |
+| `constants/`  | Shared constant values and configuration read from the environment. |
+
+Folders that hold no code yet contain a `.gitkeep` file, because Git does not
+track empty directories. Delete that file once the folder has real content.
+
+### Conventions
+
+- Every component and page lives in its own `PascalCase` folder, and the files
+  inside repeat that name:
+
+  ```text
+  components/Layout/
+  ├── Layout.jsx     the component
+  ├── Layout.css     styles it owns
+  └── index.js       public entry point
+  ```
+
+  Grouping this way keeps a component and everything it owns together, so adding
+  a test or a sub-component later does not clutter the parent folder.
+
+- `index.js` re-exports the component so it can be imported by folder name:
+
+  ```js
+  export { default } from "./Layout";
+  ```
+
+  This keeps import paths short and marks the folder boundary: anything not
+  re-exported is internal and should not be imported from outside the folder.
+
+- One component per file, using a default export.
+- CSS class names follow the BEM pattern, scoped by the component name.
+- Layers that hold plain modules, such as `hooks/` and `utils/`, keep their files
+  flat because they have no companion files to group.
+- `pages/` may import from every other folder. `components/`, `hooks/`,
+  `services/`, `utils/`, and `constants/` must not import from `pages/`, which
+  keeps reusable code free of screen-specific logic.
+
+### Naming
+
+Naming follows what a file exports: components are `PascalCase`, everything else
+is `camelCase`.
+
+| Layer         | Naming                        | Example                       |
+| ------------- | ----------------------------- | ----------------------------- |
+| `components/` | `PascalCase` folder and files | `Button/Button.jsx`           |
+| `pages/`      | `PascalCase`, `Page` suffix   | `HomePage/HomePage.jsx`       |
+| `hooks/`      | `camelCase`, `use` prefix     | `useAuth.js`                  |
+| `services/`   | `camelCase`                   | `authService.js`              |
+| `utils/`      | `camelCase`                   | `formatDate.js`               |
+| `constants/`  | `camelCase` file              | `app.js` exporting `APP_NAME` |
+
+The `use` prefix on hooks is required rather than cosmetic: React and
+`eslint-plugin-react-hooks` rely on it to detect hooks and apply the Rules of
+Hooks. Constant files are named like any other module, and only the exported
+values use `UPPER_SNAKE_CASE`.
+
+### Path Aliases
+
+Each layer has an import alias, so modules are referenced by their layer instead
+of by a relative path such as `../../components/Layout`.
+
+| Alias          | Resolves to       |
+| -------------- | ----------------- |
+| `@components/` | `src/components/` |
+| `@constants/`  | `src/constants/`  |
+| `@hooks/`      | `src/hooks/`      |
+| `@pages/`      | `src/pages/`      |
+| `@services/`   | `src/services/`   |
+| `@utils/`      | `src/utils/`      |
+
+```jsx
+import Layout from "@components/Layout";
+import { APP_NAME } from "@constants/app";
+```
+
+A component is imported by its folder name because the `index.js` inside that
+folder re-exports it. Importing the inner file directly, such as
+`@components/Layout/Layout`, also works but bypasses the folder's public entry
+point and should be avoided.
+
+Aliases are declared in two files that must be kept in sync: `resolve.alias` in
+`webpack.config.js` resolves them during bundling, and `paths` in
+`jsconfig.json` enables editor navigation and autocompletion. Adding a new layer
+means adding it to both files.
+
+A stylesheet is still imported with a relative path (`./HomePage.css`) because it
+sits next to the component that owns it.
+
+An alias that points at a missing module fails the Webpack build with
+`Module not found`. ESLint does not verify import paths, so a broken import is
+reported at build time rather than by `npm run lint`.
+
 ## Project Structure
 
 ```text
@@ -110,7 +219,24 @@ avengers-ui/
 ├── public/
 │   └── index.html
 ├── src/
-│   ├── App.css
+│   ├── components/
+│   │   └── Layout/
+│   │       ├── index.js
+│   │       ├── Layout.css
+│   │       └── Layout.jsx
+│   ├── constants/
+│   │   └── app.js
+│   ├── hooks/
+│   │   └── .gitkeep
+│   ├── pages/
+│   │   └── HomePage/
+│   │       ├── HomePage.css
+│   │       ├── HomePage.jsx
+│   │       └── index.js
+│   ├── services/
+│   │   └── .gitkeep
+│   ├── utils/
+│   │   └── .gitkeep
 │   ├── App.jsx
 │   ├── index.css
 │   └── index.jsx
@@ -118,6 +244,7 @@ avengers-ui/
 ├── .babelrc
 ├── commitlint.config.js
 ├── eslint.config.js
+├── jsconfig.json
 ├── lint-staged.config.js
 ├── package.json
 └── webpack.config.js
