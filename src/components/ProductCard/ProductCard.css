@@ -1,0 +1,119 @@
+.product-card {
+  transition:
+    border-color 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+.product-card:hover {
+  border-color: var(--sf-accent);
+  transform: translateY(-4px);
+}
+
+.product-card__media {
+  display: block;
+  position: relative;
+}
+
+.product-card__badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background-color: var(--sf-accent);
+  color: #fff;
+  padding: 0.25rem 0.85rem;
+  font-family: var(--sf-font-heading);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.product-card__sold-out {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(22, 24, 30, 0.75);
+  color: var(--sf-text-strong);
+  font-family: var(--sf-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.product-card__body {
+  padding: 1.25rem;
+}
+
+.product-card__platform {
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--sf-border);
+  color: var(--sf-text-muted);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.product-card__title {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.product-card__title a {
+  color: var(--sf-text-strong);
+}
+
+.product-card__title a:hover {
+  color: var(--sf-accent);
+}
+
+.product-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.75rem;
+  color: var(--sf-text-muted);
+  margin-bottom: 1rem;
+}
+
+.product-card__rating svg {
+  color: var(--sf-text-muted);
+}
+
+.product-card__rating svg.is-filled {
+  color: #f5a623;
+}
+
+.product-card__rating-count {
+  margin-left: 0.35rem;
+}
+
+.product-card__price {
+  font-family: var(--sf-font-heading);
+  font-weight: 700;
+  color: var(--sf-text-strong);
+  font-size: 0.9375rem;
+}
+
+.product-card__price-original {
+  display: block;
+  color: var(--sf-text-muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+/* The theme uses wide button padding, which overflows a two-column grid on
+   small screens, so the card button opts out of it. */
+.product-card__footer .btn {
+  --bs-btn-padding-x: 0.75rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 991.98px) {
+  .product-card__footer {
+    flex-wrap: wrap;
+  }
+}

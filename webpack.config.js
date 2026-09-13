@@ -1,6 +1,7 @@
 const path = require("path");
 const { existsSync } = require("fs");
 const { loadEnvFile } = require("process");
+const { DefinePlugin } = require("webpack");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -64,9 +65,21 @@ module.exports = (_, argv) => {
           test: /\.css$/i,
           use: [isProduction ? MiniCssExtractPlugin.loader : "style-loader", "css-loader"],
         },
+        {
+          test: /\.(png|jpe?g|gif|svg|webp|avif)$/i,
+          type: "asset",
+          parser: { dataUrlCondition: { maxSize: 8 * 1024 } },
+          generator: { filename: "static/media/[name].[contenthash:8][ext]" },
+        },
       ],
     },
     plugins: [
+      // `dotenv.prefix` only replaces names that exist in .env, so any missing
+      // one would be left as a `process` reference the browser cannot resolve.
+      new DefinePlugin({
+        "process.env.WEBPACK_APP_NAME": JSON.stringify(process.env.WEBPACK_APP_NAME ?? ""),
+        "process.env.WEBPACK_API_URL": JSON.stringify(process.env.WEBPACK_API_URL ?? ""),
+      }),
       new ESLintPlugin({
         context: path.resolve(__dirname, "src"),
         extensions: ["js", "jsx"],

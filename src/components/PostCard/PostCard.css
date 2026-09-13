@@ -1,0 +1,136 @@
+.post-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.post-card.sf-card {
+  background: transparent;
+  border: 0;
+}
+
+.post-card.sf-card:hover {
+  transform: translateY(-3px);
+}
+
+.post-card__media {
+  display: block;
+  position: relative;
+}
+
+.post-card__category {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #38a220;
+  color: #fff;
+  padding: 0.14rem 0.72rem;
+  font-family: var(--sf-font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.post-card__comments {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  min-width: 33px;
+  height: 29px;
+  padding-inline: 8px;
+  background-color: #fff;
+  color: var(--sf-bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 29px;
+  text-align: center;
+}
+
+.post-card__comments::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  bottom: -5px;
+  border-width: 5px 0 0 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent #fff;
+}
+
+.post-card__body {
+  padding: 25px 0 0;
+}
+
+.post-card__title {
+  font-size: 1.155rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.post-card__title a {
+  color: var(--sf-text-strong);
+}
+
+.post-card__title a:hover {
+  color: var(--sf-accent);
+}
+
+.post-card__excerpt {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin-bottom: 1.15rem;
+}
+
+.post-card__meta {
+  color: var(--sf-text);
+  font-size: 0.7875rem;
+}
+
+.post-card__meta svg {
+  color: inherit;
+}
+
+.post-card__footer {
+  padding-top: 0.15rem;
+}
+
+.post-card__read-more {
+  background-color: var(--sf-bg-elevated);
+  color: var(--sf-text-strong);
+  padding: 0.52rem 1rem;
+  font-family: var(--sf-font-heading);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.post-card__read-more:hover {
+  background-color: var(--sf-accent);
+  color: #fff;
+}
+
+.post-card--compact {
+  padding-block: 0.75rem;
+}
+
+.post-card--compact + .post-card--compact {
+  border-top: 1px solid var(--sf-border);
+}
+
+.post-card__thumb {
+  flex: 0 0 5rem;
+  width: 5rem;
+  height: 4rem;
+  display: block;
+}
+
+.post-card__title--compact {
+  font-size: 0.875rem;
+  margin-bottom: 0.35rem;
+}
+
+@media (max-width: 575.98px) {
+  .post-card__footer {
+    align-items: flex-start !important;
+    flex-direction: column;
+  }
+}

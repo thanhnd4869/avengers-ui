@@ -6,5 +6,22 @@
  */
 export const PATHS = Object.freeze({
   HOME: "/",
+  SHOP: "/shop",
+  PRODUCT: "/products/:slug",
+  CART: "/cart",
+  CHECKOUT: "/checkout",
+  BLOG: "/blog",
+  POST: "/blog/:slug",
+  GALLERY: "/gallery",
   NOT_FOUND: "/not-found",
 });
+
+/**
+ * Builds a path from a pattern by replacing its `:param` placeholders.
+ */
+export function buildPath(pattern, params = {}) {
+  return Object.entries(params).reduce(
+    (path, [key, value]) => path.replace(`:${key}`, encodeURIComponent(value)),
+    pattern,
+  );
+}

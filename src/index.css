@@ -1,15 +1,27 @@
 /*
- * Project-wide styles layered on top of Bootstrap Reboot.
+ * Project-wide styles layered on top of Bootstrap Reboot and the theme tokens.
  *
- * Bootstrap already resets box sizing and margins, normalises form control
- * typography, and sets the base font stack, so only rules it does not cover
- * belong here.
+ * Bootstrap already resets box sizing and margins and normalises form control
+ * typography, so only rules neither of those covers belong here.
  */
 html {
-  color-scheme: light dark;
+  color-scheme: dark;
 }
 
 body {
   min-width: 320px;
   min-height: 100vh;
+}
+
+main {
+  overflow: hidden;
+}
+
+.home-content {
+  padding: 0 0 100px;
+}
+
+::selection {
+  background-color: var(--sf-accent);
+  color: #fff;
 }

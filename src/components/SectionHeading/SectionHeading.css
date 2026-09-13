@@ -1,0 +1,28 @@
+.section-heading {
+  position: relative;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+}
+
+.section-heading::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sf-accent) 0 42px, rgba(255, 255, 255, 0.09) 42px);
+}
+
+.section-heading.text-start::after {
+  left: 0;
+}
+
+.section-heading.text-center::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.section-heading__highlight {
+  color: var(--sf-accent);
+}

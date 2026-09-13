@@ -1,0 +1,156 @@
+.header {
+  position: relative;
+  z-index: 1030;
+  background-color: rgba(10, 11, 14, 0.96);
+  border-bottom: 1px solid var(--sf-border);
+}
+
+.header__topbar {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  background-color: #11141a;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+
+.header__topbar .container,
+.header__social,
+.header__social li {
+  height: 100%;
+  align-items: center;
+}
+
+.header__social li {
+  display: flex;
+}
+
+.header__social a,
+.header__icon-button {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.header__social svg,
+.header__icon-button svg {
+  display: block;
+}
+
+.header__social a:hover {
+  color: var(--sf-accent);
+}
+
+.header__icon-button {
+  position: relative;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--sf-text);
+  transition: color 0.2s ease-in-out;
+}
+
+.header__icon-button:hover {
+  color: var(--sf-accent);
+}
+
+.header__cart-count {
+  position: absolute;
+  top: 0.125rem;
+  right: 0;
+  min-width: 0.875rem;
+  height: 0.875rem;
+  padding: 0 0.2rem;
+  background-color: var(--sf-accent);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  line-height: 0.875rem;
+  text-align: center;
+  transform: translate(25%, -25%);
+}
+
+.header__navbar {
+  height: 105px;
+  padding-block: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.header__navbar > .container {
+  height: 100%;
+}
+
+.header__brand {
+  font-family: var(--sf-font-heading);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sf-text-strong);
+}
+
+.header__brand img {
+  display: block;
+  width: 153px;
+  height: auto;
+}
+
+.header__brand:hover {
+  color: var(--sf-accent);
+}
+
+.header__link {
+  --bs-nav-link-color: var(--sf-text-strong);
+  --bs-nav-link-hover-color: var(--sf-accent);
+  position: relative;
+  font-family: var(--sf-font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  padding: 2.6rem 1.05rem !important;
+}
+
+/* Accent underline that grows from the centre on hover and while active. */
+.header__link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 1.8rem;
+  width: 0;
+  height: 2px;
+  background-color: var(--sf-accent);
+  transform: translateX(-50%);
+  transition: width 0.2s ease-in-out;
+}
+
+@media (max-width: 991.98px) {
+  .header__navbar {
+    height: 76px;
+  }
+
+  .header__link {
+    padding: 0.8rem 0 !important;
+  }
+
+  .header__link::after {
+    display: none;
+  }
+}
+
+.header__link:hover::after,
+.header__link.active::after {
+  width: calc(100% - 2rem);
+}
+
+.header__link.active {
+  color: var(--sf-accent);
+}
+
+.header__toggle {
+  border-color: var(--sf-border);
+}

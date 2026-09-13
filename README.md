@@ -143,7 +143,7 @@ track empty directories. Delete that file once the folder has real content.
   the styling.
 
   Grouping this way keeps a component and everything it owns together, so adding
-  a test or a sub-component later does not clutter the parent folder.
+  a sub-component later does not clutter the parent folder.
 
 - `index.js` re-exports the component so it can be imported by folder name:
 

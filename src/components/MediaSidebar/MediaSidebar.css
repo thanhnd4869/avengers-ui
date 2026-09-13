@@ -1,0 +1,135 @@
+.media-sidebar {
+  display: grid;
+  gap: 30px;
+}
+
+.media-sidebar__search {
+  display: flex;
+  height: 73px;
+  padding: 20px 23px;
+  border-radius: 4px;
+  background: var(--sf-bg-elevated);
+}
+
+.media-sidebar__search input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  background: #fff;
+  padding: 0 12px;
+  color: #181c23;
+  outline: 0;
+}
+
+.media-sidebar__search button {
+  width: 47px;
+  border: 0;
+  background: var(--sf-accent);
+  color: #fff;
+}
+
+.media-widget__title {
+  position: relative;
+  height: 66px;
+  margin: 0;
+  padding: 23px;
+  background: var(--sf-bg-raised);
+  font-size: 1.0675rem;
+  line-height: 1.2;
+}
+
+.media-widget__title::after {
+  content: "";
+  position: absolute;
+  top: 31px;
+  right: 0;
+  width: 124px;
+  height: 3px;
+  background: #fff;
+}
+
+.media-widget__socials {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.media-widget__socials a {
+  display: grid;
+  height: 87px;
+  place-items: center;
+  background: var(--sf-bg-elevated);
+  color: #fff;
+}
+
+.media-widget__socials a:nth-child(2),
+.media-widget__socials a:nth-child(7) {
+  background: #363d4a;
+}
+
+.media-widget__socials a:nth-child(4) {
+  background: #3f4655;
+}
+
+.media-widget__socials a:nth-child(5) {
+  background: var(--sf-bg-raised);
+}
+
+.media-widget__socials a svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.media-widget__socials a:hover {
+  background: var(--sf-accent);
+}
+
+.media-widget:has(.media-widget__socials) {
+  border-radius: 4px;
+  background: var(--sf-bg-elevated);
+  overflow: hidden;
+}
+
+.media-widget__video {
+  display: block;
+  margin: 21px 23px 19px;
+  aspect-ratio: 16 / 9;
+  border-radius: 3px;
+}
+
+.media-widget__play {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 59px;
+  height: 59px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.media-widget__play::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 52%;
+  border-width: 8px 0 8px 12px;
+  border-style: solid;
+  border-color: transparent transparent transparent #fff;
+  transform: translate(-50%, -50%);
+}
+
+.media-widget:has(.media-widget__video) {
+  padding-bottom: 1px;
+  border-radius: 4px;
+  background: var(--sf-bg-elevated);
+  overflow: hidden;
+}
+
+.media-widget__gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.media-widget__gallery a {
+  aspect-ratio: 1;
+}

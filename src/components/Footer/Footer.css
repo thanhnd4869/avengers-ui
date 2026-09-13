@@ -1,0 +1,79 @@
+.footer {
+  position: relative;
+  background:
+    url("https://wp.nkdev.info/squadforce/wp-content/uploads/2019/11/bg-top.png") center top / cover
+      no-repeat,
+    #101319;
+  padding-top: 8rem;
+  margin-top: 0;
+  border-top: 0;
+}
+
+.footer__heading {
+  position: relative;
+  font-size: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.footer__heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.5rem;
+  height: 2px;
+  background-color: var(--sf-accent);
+}
+
+.footer__input {
+  background-color: var(--sf-bg-elevated);
+  border-color: var(--sf-border);
+  border-radius: 0;
+  color: var(--sf-text-strong);
+}
+
+.footer__input:focus {
+  background-color: var(--sf-bg-elevated);
+  border-color: var(--sf-accent);
+  box-shadow: none;
+  color: var(--sf-text-strong);
+}
+
+.footer__status {
+  font-size: 0.8125rem;
+}
+
+.footer__links li + li {
+  margin-top: 0.75rem;
+}
+
+.footer__about {
+  max-width: 34rem;
+  margin-bottom: 1.75rem;
+}
+
+.footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: var(--sf-bg-elevated);
+  color: var(--sf-text);
+  transition:
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+}
+
+.footer__social-link:hover {
+  background-color: var(--sf-accent);
+  color: #fff;
+}
+
+.footer__bottom {
+  margin-top: 3.5rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--sf-border);
+  font-size: 0.8125rem;
+}

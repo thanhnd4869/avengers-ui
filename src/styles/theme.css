@@ -1,0 +1,165 @@
+/*
+ * Design tokens for the SquadForce-inspired dark theme.
+ *
+ * Values are measured from the reference design so components can refer to a
+ * name instead of repeating literal colours.
+ */
+:root {
+  --sf-bg: #181c23;
+  --sf-bg-elevated: #292e38;
+  --sf-bg-raised: #2f3541;
+  --sf-bg-sunken: #16181e;
+  --sf-accent: #dd163b;
+  --sf-accent-dark: #b01230;
+  --sf-text: #a0a7ab;
+  --sf-text-strong: #ffffff;
+  --sf-text-muted: #6c7278;
+  --sf-border: rgba(255, 255, 255, 0.08);
+
+  --sf-font-body: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --sf-font-heading: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --sf-header-height: 105px;
+  --sf-container: 1140px;
+  --sf-skew: -12deg;
+}
+
+/*
+ * Bootstrap reads these variables throughout its components, so overriding them
+ * here re-themes buttons, links, and form controls without extra selectors.
+ */
+[data-bs-theme="dark"] {
+  --bs-body-bg: var(--sf-bg);
+  --bs-body-color: var(--sf-text);
+  --bs-body-font-family: var(--sf-font-body);
+  --bs-body-font-size: 0.875rem;
+  --bs-emphasis-color: var(--sf-text-strong);
+  --bs-heading-color: var(--sf-text-strong);
+  --bs-border-color: var(--sf-border);
+  --bs-link-color: var(--sf-text-strong);
+  --bs-link-hover-color: var(--sf-accent);
+  --bs-primary: var(--sf-accent);
+  --bs-primary-rgb: 221, 22, 59;
+}
+
+body {
+  background-color: var(--sf-bg);
+  font-family: var(--sf-font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--sf-font-heading);
+  font-weight: 700;
+  color: var(--sf-text-strong);
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+}
+
+a {
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Angular button styling that matches the reference design. */
+.btn {
+  --bs-btn-font-family: var(--sf-font-heading);
+  --bs-btn-font-size: 0.75rem;
+  --bs-btn-font-weight: 700;
+  --bs-btn-border-radius: 0;
+  --bs-btn-padding-x: 1.5rem;
+  --bs-btn-padding-y: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--sf-accent);
+  --bs-btn-border-color: var(--sf-accent);
+  --bs-btn-hover-bg: var(--sf-accent-dark);
+  --bs-btn-hover-border-color: var(--sf-accent-dark);
+  --bs-btn-active-bg: var(--sf-accent-dark);
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+}
+
+.btn-light {
+  --bs-btn-bg: #fff;
+  --bs-btn-color: var(--sf-bg);
+  --bs-btn-hover-bg: var(--sf-accent);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-border-color: transparent;
+  --bs-btn-hover-border-color: transparent;
+}
+
+.btn-outline-light {
+  --bs-btn-hover-bg: var(--sf-accent);
+  --bs-btn-hover-border-color: var(--sf-accent);
+}
+
+/*
+ * Skewed container used by badges and tags. The inner element is unskewed so
+ * text stays upright while the background stays angled.
+ */
+.sf-skew {
+  display: inline-block;
+  transform: skewX(var(--sf-skew));
+}
+
+.sf-skew > * {
+  display: inline-block;
+  transform: skewX(calc(var(--sf-skew) * -1));
+}
+
+.sf-card {
+  background-color: var(--sf-bg-elevated);
+  border: 1px solid var(--sf-border);
+}
+
+.container {
+  --bs-gutter-x: 30px;
+  max-width: var(--sf-container);
+}
+
+.sf-link-muted {
+  color: var(--sf-text);
+}
+
+.sf-link-muted:hover {
+  color: var(--sf-accent);
+}
+
+/* Media placeholder shown until real artwork is available. */
+.sf-media {
+  background: linear-gradient(135deg, var(--sf-bg-raised), var(--sf-bg-sunken));
+  overflow: hidden;
+  position: relative;
+}
+
+.sf-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease-in-out;
+}
+
+.sf-media-zoom:hover img {
+  transform: scale(1.06);
+}
+
+.sf-ratio-16x9 {
+  aspect-ratio: 16 / 9;
+}
+
+.sf-ratio-4x3 {
+  aspect-ratio: 4 / 3;
+}
+
+.sf-ratio-1x1 {
+  aspect-ratio: 1 / 1;
+}
