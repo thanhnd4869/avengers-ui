@@ -1,14 +1,3 @@
-.product-card {
-  transition:
-    border-color 0.2s ease-in-out,
-    transform 0.2s ease-in-out;
-}
-
-.product-card:hover {
-  border-color: var(--sf-accent);
-  transform: translateY(-4px);
-}
-
 .product-card__media {
   display: block;
   position: relative;
@@ -17,7 +6,7 @@
 .product-card__badge {
   position: absolute;
   top: 0.75rem;
-  left: 0.75rem;
+  left: 0;
   background-color: var(--sf-accent);
   color: #fff;
   padding: 0.25rem 0.85rem;
@@ -43,7 +32,7 @@
 }
 
 .product-card__body {
-  padding: 1.25rem;
+  padding: 1.25rem 0 0;
 }
 
 .product-card__platform {
@@ -110,6 +99,21 @@
 .product-card__footer .btn {
   --bs-btn-padding-x: 0.75rem;
   flex-shrink: 0;
+}
+
+/* List variant: artwork beside the details, separated by a rule. */
+.product-card--list + .product-card--list {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sf-border);
+}
+
+.product-card--list .product-card__title {
+  font-size: 0.875rem;
+}
+
+.product-card--list .product-card__rating {
+  margin-bottom: 0;
 }
 
 @media (max-width: 991.98px) {

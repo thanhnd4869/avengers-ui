@@ -17,10 +17,6 @@ main {
   overflow: hidden;
 }
 
-.home-content {
-  padding: 0 0 100px;
-}
-
 ::selection {
   background-color: var(--sf-accent);
   color: #fff;

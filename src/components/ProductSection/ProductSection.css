@@ -1,67 +1,26 @@
-.product-section {
-  margin-top: 66px;
-}
-
-.product-section--compact {
-  margin-top: 52px;
-}
-
+/* Laying the row out as flex stops the heading rule short of the link instead
+   of running underneath it. */
 .product-section__heading-row {
-  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .product-section__heading-row .section-heading {
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .product-section__all {
-  position: absolute;
-  top: 8px;
-  right: 0;
+  flex: 0 0 auto;
+  /* Matches the heading margin so both sit on the same optical line. */
+  margin: 0 0 2.1875rem 1.25rem;
   color: var(--sf-text-muted);
   font: 700 0.7rem var(--sf-font-heading);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .product-section__all:hover {
   color: var(--sf-accent);
-}
-
-@media (max-width: 575.98px) {
-  .product-section__heading-row .section-heading {
-    padding-right: 72px;
-  }
-
-  .product-section__all {
-    top: 5px;
-  }
-}
-
-.product-section--compact .product-card {
-  display: grid !important;
-  grid-template-columns: 92px 1fr;
-  min-height: 108px;
-}
-
-.product-section--compact .product-card__media {
-  aspect-ratio: auto;
-}
-
-.product-section--compact .product-card__body {
-  padding: 12px 14px;
-}
-
-.product-section--compact .product-card__platforms,
-.product-section--compact .product-card__footer .btn,
-.product-section--compact .product-card__rating-count {
-  display: none !important;
-}
-
-.product-section--compact .product-card__rating {
-  margin-bottom: 6px;
-}
-
-.product-section--compact .product-card__footer {
-  display: block !important;
 }

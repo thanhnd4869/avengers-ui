@@ -1,0 +1,17 @@
+.tab-filter__item {
+  padding: 0.625rem 1.4rem;
+  border: 0;
+  background-color: var(--sf-bg-elevated);
+  color: var(--sf-text-strong);
+  font-family: var(--sf-font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.21px;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.tab-filter__item:hover,
+.tab-filter__item.is-active {
+  background-color: var(--sf-accent);
+}

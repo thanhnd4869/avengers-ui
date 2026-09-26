@@ -1,13 +1,3 @@
-.news-section {
-  margin-bottom: 66px;
-  padding-top: 0;
-}
-
-.news-section > .container > .row {
-  --bs-gutter-x: 30px;
-  --bs-gutter-y: 30px;
-}
-
-.news-section__grid {
-  margin-top: 0;
+.news-section__placeholder {
+  height: 425px;
 }

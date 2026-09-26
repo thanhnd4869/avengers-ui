@@ -28,6 +28,7 @@ const ICONS = {
   star: faStar,
   facebook: faFacebook,
   google: faGooglePlus,
+  "google-plus": faGooglePlus,
   instagram: faInstagram,
   twitter: faTwitter,
   rss: faRss,

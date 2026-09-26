@@ -70,7 +70,7 @@ a {
   --bs-btn-font-family: var(--sf-font-heading);
   --bs-btn-font-size: 0.75rem;
   --bs-btn-font-weight: 700;
-  --bs-btn-border-radius: 0;
+  --bs-btn-border-radius: 0.25rem;
   --bs-btn-padding-x: 1.5rem;
   --bs-btn-padding-y: 0.65rem;
   letter-spacing: 0.06em;
@@ -94,6 +94,20 @@ a {
   --bs-btn-hover-color: #fff;
   --bs-btn-border-color: transparent;
   --bs-btn-hover-border-color: transparent;
+}
+
+/* Neutral call to action that turns accent on hover, used by product cards. */
+.btn-secondary {
+  --bs-btn-bg: var(--sf-bg-raised);
+  --bs-btn-border-color: transparent;
+  --bs-btn-color: var(--sf-text-strong);
+  --bs-btn-hover-bg: var(--sf-accent);
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-bg: var(--sf-accent);
+  --bs-btn-active-border-color: transparent;
+  --bs-btn-disabled-bg: var(--sf-bg-raised);
+  --bs-btn-disabled-border-color: transparent;
 }
 
 .btn-outline-light {
@@ -133,6 +147,47 @@ a {
   color: var(--sf-accent);
 }
 
+/*
+ * Brand colours for social links, set as a custom property so any component can
+ * decide where to apply it (background here, text colour elsewhere).
+ */
+[data-social="facebook"] {
+  --sf-social: #3b5998;
+}
+
+[data-social="twitter"] {
+  --sf-social: #00b6f1;
+}
+
+[data-social="instagram"] {
+  --sf-social: #527198;
+}
+
+[data-social="youtube"] {
+  --sf-social: #ff0000;
+}
+
+[data-social="twitch"] {
+  --sf-social: #5c43a1;
+}
+
+[data-social="google"],
+[data-social="google-plus"] {
+  --sf-social: #df4a32;
+}
+
+[data-social="rss"] {
+  --sf-social: #e06618;
+}
+
+[data-social="steam"] {
+  --sf-social: #272425;
+}
+
+[data-social="discord"] {
+  --sf-social: #5865f2;
+}
+
 /* Media placeholder shown until real artwork is available. */
 .sf-media {
   background: linear-gradient(135deg, var(--sf-bg-raised), var(--sf-bg-sunken));
@@ -158,6 +213,10 @@ a {
 
 .sf-ratio-4x3 {
   aspect-ratio: 4 / 3;
+}
+
+.sf-ratio-3x4 {
+  aspect-ratio: 3 / 4;
 }
 
 .sf-ratio-1x1 {

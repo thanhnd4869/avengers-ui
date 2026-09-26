@@ -1,16 +1,3 @@
-.post-card {
-  transition: transform 0.2s ease-in-out;
-}
-
-.post-card.sf-card {
-  background: transparent;
-  border: 0;
-}
-
-.post-card.sf-card:hover {
-  transform: translateY(-3px);
-}
-
 .post-card__media {
   display: block;
   position: relative;
@@ -19,8 +6,8 @@
 .post-card__category {
   position: absolute;
   top: 10px;
-  left: 10px;
-  background-color: #38a220;
+  left: 0;
+  background-color: var(--sf-category, #38a220);
   color: #fff;
   padding: 0.14rem 0.72rem;
   font-family: var(--sf-font-heading);
@@ -108,24 +95,34 @@
   color: #fff;
 }
 
-.post-card--compact {
-  padding-block: 0.75rem;
-}
-
+/* Sidebar variant: rows separated by a rule instead of card surfaces. */
 .post-card--compact + .post-card--compact {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
   border-top: 1px solid var(--sf-border);
 }
 
-.post-card__thumb {
-  flex: 0 0 5rem;
-  width: 5rem;
-  height: 4rem;
-  display: block;
+.post-card__title--sm {
+  font-size: 0.9625rem;
+  margin-bottom: 0;
 }
 
-.post-card__title--compact {
-  font-size: 0.875rem;
-  margin-bottom: 0.35rem;
+/* List variant used by the tabbed news section. */
+.post-card--list + .post-card--list {
+  margin-top: 1.875rem;
+  padding-top: 1.875rem;
+  border-top: 1px solid var(--sf-border);
+}
+
+.post-card--list .post-card__title {
+  margin-bottom: 0;
+}
+
+.post-card--list .post-card__excerpt {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 @media (max-width: 575.98px) {

@@ -1,5 +1,4 @@
 import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
 import Placeholder from "react-bootstrap/Placeholder";
 import Row from "react-bootstrap/Row";
 
@@ -26,40 +25,38 @@ function NewsSection() {
   const gridPosts = items.slice(BOX_LIMIT, BOX_LIMIT + GRID_LIMIT);
 
   return (
-    <section className="news-section">
-      <Container>
-        <SectionHeading highlight="Latest">News</SectionHeading>
+    <section className="news-section mb-5">
+      <SectionHeading highlight="Latest">News</SectionHeading>
 
-        {posts.isLoading ? (
-          <>
-            <Placeholder as="div" animation="glow" className="d-block">
-              <Placeholder xs={12} style={{ height: "425px" }} />
-            </Placeholder>
-            <Row className="news-section__grid g-4">
-              {Array.from({ length: GRID_LIMIT }, (_, index) => (
-                <Col key={index} lg={3} sm={6}>
-                  <Placeholder as="div" animation="glow">
-                    <Placeholder xs={12} style={{ height: "9rem" }} />
-                    <Placeholder xs={9} className="mt-3" />
-                    <Placeholder xs={6} />
-                  </Placeholder>
-                </Col>
-              ))}
-            </Row>
-          </>
-        ) : (
-          <>
-            <NewsBox posts={boxPosts} />
-            <Row className="news-section__grid g-4">
-              {gridPosts.map((post) => (
-                <Col key={post.id} lg={3} sm={6}>
-                  <PostCard post={post} />
-                </Col>
-              ))}
-            </Row>
-          </>
-        )}
-      </Container>
+      {posts.isLoading ? (
+        <>
+          <Placeholder as="div" animation="glow" className="d-block">
+            <Placeholder xs={12} className="news-section__placeholder" />
+          </Placeholder>
+          <Row className="g-4 mt-4">
+            {Array.from({ length: GRID_LIMIT }, (_, index) => (
+              <Col key={index} lg={3} sm={6}>
+                <Placeholder as="div" animation="glow">
+                  <Placeholder className="d-block w-100 sf-ratio-16x9 rounded" />
+                  <Placeholder xs={9} className="mt-3" />
+                  <Placeholder xs={6} />
+                </Placeholder>
+              </Col>
+            ))}
+          </Row>
+        </>
+      ) : (
+        <>
+          <NewsBox posts={boxPosts} />
+          <Row className="g-4 mt-4">
+            {gridPosts.map((post) => (
+              <Col key={post.id} lg={3} sm={6}>
+                <PostCard post={post} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
     </section>
   );
 }

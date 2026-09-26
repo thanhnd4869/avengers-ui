@@ -1,84 +1,121 @@
-import { Link } from "react-router";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import Placeholder from "react-bootstrap/Placeholder";
 
+import GalleryGrid from "@components/GalleryGrid";
 import Icon from "@components/Icon";
+import PostCard from "@components/PostCard";
+import ProductCard from "@components/ProductCard";
+import Widget from "@components/Widget";
 import useAsync from "@hooks/useAsync";
 import { PATHS } from "@routes/paths";
 import { getHomeMedia } from "@services/homeMediaService";
+import { getPosts } from "@services/postService";
+import { getProducts } from "@services/productService";
 
 import "./MediaSidebar.css";
 
-const DEFAULT_SOCIALS = [
-  "twitch",
-  "instagram",
-  "facebook",
-  "google",
-  "youtube",
-  "twitter",
-  "instagram",
-  "rss",
-].map((name, index) => ({ name, label: name, url: "#", id: `${name}-${index}` }));
+const RECENT_LIMIT = 3;
+const POPULAR_LIMIT = 3;
 
-const DEFAULT_VIDEO = {
-  url: "https://www.youtube.com/watch?v=vXy8UBazlO8",
-  image: { url: "https://img.youtube.com/vi/vXy8UBazlO8/maxresdefault.jpg", alt: "Latest video" },
-};
+/**
+ * Sidebar that accompanies the home page content column.
+ *
+ * Every block is a `Widget`, so adding or reordering one is a matter of
+ * composition rather than new styling.
+ */
+function MediaSidebar() {
+  const media = useAsync(() => getHomeMedia(), []);
+  const recentPosts = useAsync(() => getPosts({ limit: RECENT_LIMIT }), []);
+  // The API sorts products by `-sales` or `-rating`. Using the rating here keeps
+  // this widget from repeating the best sellers listed in the content column.
+  const popularProducts = useAsync(
+    () => getProducts({ sort: "-rating", limit: POPULAR_LIMIT }),
+    [],
+  );
 
-function MediaSidebar({ showScreenshots = true }) {
-  const { data, error } = useAsync(() => getHomeMedia(), []);
-  const media = error ? null : data?.data;
-  const socialLinks = media?.socialLinks?.length === 8 ? media.socialLinks : DEFAULT_SOCIALS;
-  const latestVideo = media?.latestVideo ?? DEFAULT_VIDEO;
+  const content = media.error ? null : media.data?.data;
+  const socialLinks = content?.socialLinks ?? [];
+  const latestVideo = content?.latestVideo;
+  const screenshots = content?.screenshots ?? [];
+  const posts = recentPosts.error ? [] : (recentPosts.data?.data ?? []);
+  const products = popularProducts.error ? [] : (popularProducts.data?.data ?? []);
 
   return (
-    <aside className="media-sidebar">
-      <form className="media-sidebar__search" action={PATHS.BLOG}>
-        <label className="visually-hidden" htmlFor="home-search">
-          Search
-        </label>
-        <input id="home-search" name="q" type="search" placeholder="Search..." />
-        <button type="submit" aria-label="Submit search">
-          <Icon name="search" />
-        </button>
-      </form>
+    <aside className="media-sidebar d-grid gap-4">
+      <Widget>
+        <Form action={PATHS.BLOG}>
+          <Form.Label htmlFor="home-search" className="visually-hidden">
+            Search
+          </Form.Label>
+          <InputGroup>
+            <Form.Control id="home-search" name="q" type="search" placeholder="Search..." />
+            <Button type="submit" variant="primary" aria-label="Submit search">
+              <Icon name="search" />
+            </Button>
+          </InputGroup>
+        </Form>
+      </Widget>
 
       {socialLinks.length ? (
-        <section className="media-widget">
-          <h3 className="media-widget__title">We Are Social</h3>
-          <div className="media-widget__socials">
+        <Widget title="We Are Social" bodyClassName="p-0">
+          <ul className="media-sidebar__socials list-unstyled mb-0">
             {socialLinks.map((social) => (
-              <a key={social.id ?? social.name} href={social.url} aria-label={social.label}>
-                <Icon name={social.name} size={18} />
-              </a>
+              <li key={social.id ?? social.name}>
+                <a href={social.url} aria-label={social.label} data-social={social.name}>
+                  <Icon name={social.name} size={18} />
+                </a>
+              </li>
             ))}
-          </div>
-        </section>
+          </ul>
+        </Widget>
       ) : null}
 
       {latestVideo ? (
-        <section className="media-widget">
-          <h3 className="media-widget__title">Latest Video</h3>
-          <a className="media-widget__video sf-media sf-media-zoom" href={latestVideo.url}>
+        <Widget title="Latest Video">
+          <a
+            className="d-block sf-media sf-media-zoom sf-ratio-16x9 rounded position-relative"
+            href={latestVideo.url}
+          >
             <img src={latestVideo.image.url} alt={latestVideo.image.alt} loading="lazy" />
-            <span className="media-widget__play" aria-hidden="true" />
+            <span className="media-sidebar__play" aria-hidden="true" />
           </a>
-        </section>
+        </Widget>
       ) : null}
 
-      {showScreenshots && media?.screenshots?.length ? (
-        <section className="media-widget">
-          <h3 className="media-widget__title">Latest Screenshots</h3>
-          <div className="media-widget__gallery">
-            {media.screenshots.slice(0, 6).map((screenshot) => (
-              <Link
-                key={screenshot.id}
-                to={screenshot.linkUrl ?? PATHS.GALLERY}
-                className="sf-media sf-media-zoom"
-              >
-                <img src={screenshot.image.url} alt={screenshot.image.alt} loading="lazy" />
-              </Link>
-            ))}
-          </div>
-        </section>
+      {recentPosts.isLoading || posts.length ? (
+        <Widget title={`Top ${RECENT_LIMIT} Recent`}>
+          {recentPosts.isLoading ? (
+            <Placeholder as="div" animation="glow">
+              <Placeholder xs={12} />
+              <Placeholder xs={8} />
+            </Placeholder>
+          ) : (
+            posts.map((post) => <PostCard key={post.id} post={post} variant="compact" />)
+          )}
+        </Widget>
+      ) : null}
+
+      {screenshots.length ? (
+        <Widget title="Latest Screenshots">
+          <GalleryGrid items={screenshots} count={6} span={6} gutter="g-2" />
+        </Widget>
+      ) : null}
+
+      {popularProducts.isLoading || products.length ? (
+        <Widget title="Most Popular">
+          {popularProducts.isLoading ? (
+            <Placeholder as="div" animation="glow">
+              <Placeholder xs={12} />
+              <Placeholder xs={8} />
+            </Placeholder>
+          ) : (
+            products.map((product) => (
+              <ProductCard key={product.id} product={product} variant="list" />
+            ))
+          )}
+        </Widget>
       ) : null}
     </aside>
   );

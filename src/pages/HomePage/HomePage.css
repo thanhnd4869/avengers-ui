@@ -1,0 +1,12 @@
+.home-page {
+  padding-block: 3.5rem 5rem;
+}
+
+/* The sidebar follows the taller content column, so it sticks below the header
+   once its own content has scrolled past. */
+@media (min-width: 992px) {
+  .home-page__sidebar {
+    position: sticky;
+    top: 1.5rem;
+  }
+}

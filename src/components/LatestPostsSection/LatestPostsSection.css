@@ -1,15 +1,5 @@
-.latest-posts-section {
-  padding: 0 0 72px;
-}
-
-.latest-posts-section__placeholder {
-  height: 196px;
-}
-
 .latest-post__media {
   display: block;
-  height: 196px;
-  border-radius: 4px;
 }
 
 .latest-post__comments {
@@ -81,7 +71,6 @@
 .latest-post__read-more {
   display: inline-block;
   padding: 9px 19px;
-  border-radius: 3px;
   background: var(--sf-bg-elevated);
   color: #fff;
   font: 700 0.7rem var(--sf-font-heading);
@@ -91,17 +80,4 @@
 .latest-post__read-more:hover {
   background: var(--sf-accent);
   color: #fff;
-}
-
-@media (max-width: 991.98px) {
-  .latest-posts-section .media-sidebar {
-    margin-top: 18px;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .latest-post__media {
-    height: auto;
-    aspect-ratio: 16 / 9;
-  }
 }

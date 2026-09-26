@@ -1,0 +1,37 @@
+.widget {
+  background-color: var(--sf-bg-elevated);
+  overflow: hidden;
+}
+
+/* The title bar spans the full panel width, so it cancels the body padding
+   rather than the panel adding a second inset around it. */
+.widget__title {
+  margin: 0;
+  padding: 1.25rem 1.4375rem;
+  background-color: var(--sf-bg-raised);
+  font-size: 1.0675rem;
+  line-height: 1.2;
+}
+
+/* A rule continues from the label to the panel edge, matching the reference. */
+.widget__title span {
+  display: flex;
+  align-items: center;
+  gap: 1.4375rem;
+}
+
+.widget__title span::after {
+  content: "";
+  flex: 1 1 auto;
+  border-bottom: 3px solid var(--sf-text-strong);
+}
+
+.widget__body {
+  padding: 1.25rem 1.4375rem;
+}
+
+/* Widgets whose content reaches the panel edge (icon grids, galleries) opt out
+   of the body inset with `bodyClassName="p-0"`. */
+.widget__body:empty {
+  display: none;
+}
