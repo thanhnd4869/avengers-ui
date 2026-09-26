@@ -2,10 +2,13 @@ const path = require("path");
 const { existsSync } = require("fs");
 const { loadEnvFile } = require("process");
 const { DefinePlugin } = require("webpack");
+const CopyPlugin = require("copy-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const publicDir = path.resolve(__dirname, "public");
 
 const envPath = path.resolve(__dirname, ".env");
 
@@ -32,7 +35,7 @@ module.exports = (_, argv) => {
     devtool: isProduction ? "source-map" : "eval-cheap-module-source-map",
     devServer: {
       static: {
-        directory: path.resolve(__dirname, "public"),
+        directory: publicDir,
       },
       compress: true,
       historyApiFallback: true,
@@ -63,7 +66,17 @@ module.exports = (_, argv) => {
         },
         {
           test: /\.css$/i,
-          use: [isProduction ? MiniCssExtractPlugin.loader : "style-loader", "css-loader"],
+          use: [
+            isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+            {
+              loader: "css-loader",
+              options: {
+                // Root-relative URLs point at files served from `public/`, not at
+                // modules to bundle, so leave them untouched like JSX `src` attributes.
+                url: { filter: (url) => !url.startsWith("/") },
+              },
+            },
+          ],
         },
         {
           test: /\.(png|jpe?g|gif|svg|webp|avif)$/i,
@@ -88,8 +101,24 @@ module.exports = (_, argv) => {
         failOnError: true,
       }),
       new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, "public/index.html"),
+        template: path.resolve(publicDir, "index.html"),
       }),
+      // The dev server reads `public/` straight from disk, but a production
+      // build has to copy it so files keep their exact URL (favicon.ico,
+      // robots.txt, images referenced as `/assets/...`).
+      isProduction &&
+        new CopyPlugin({
+          patterns: [
+            {
+              from: publicDir,
+              to: path.resolve(__dirname, "build"),
+              // HtmlWebpackPlugin renders the template with the hashed bundle
+              // tags injected, so copying the raw file would overwrite it.
+              globOptions: { ignore: ["**/index.html"] },
+              noErrorOnMissing: true,
+            },
+          ],
+        }),
       isProduction &&
         new MiniCssExtractPlugin({
           filename: "static/css/[name].[contenthash:8].css",
