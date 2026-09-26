@@ -51,16 +51,15 @@
 }
 
 .news-box__item-title {
-  overflow: hidden;
   margin: 5px 0 2px;
   color: #fff;
   font-family: var(--sf-font-heading);
   font-size: 0.9625rem;
   font-weight: 700;
   line-height: 1.2;
-  text-overflow: ellipsis;
   text-transform: uppercase;
-  white-space: nowrap;
+  /* Titles wrap instead of ending in "...", so the whole headline is readable. */
+  overflow-wrap: anywhere;
 }
 
 .news-box__item-text {

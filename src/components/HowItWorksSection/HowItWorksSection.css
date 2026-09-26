@@ -1,0 +1,32 @@
+.how-step {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--sf-bg-elevated);
+}
+
+/* Oversized step number as a background watermark. */
+.how-step__number {
+  position: absolute;
+  top: -0.5rem;
+  right: 0.75rem;
+  color: rgba(255, 255, 255, 0.05);
+  font-family: var(--sf-font-heading);
+  font-size: 4.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.how-step__icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 0.25rem;
+  background-color: var(--sf-accent);
+  color: #fff;
+}
+
+.how-step__title {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}

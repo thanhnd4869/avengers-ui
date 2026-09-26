@@ -47,7 +47,12 @@ function ProductCard({ product, variant = "grid" }) {
   } = product;
 
   const href = buildPath(PATHS.PRODUCT, { slug });
-  const isDiscounted = originalPriceMin !== null && originalPriceMin > priceMin;
+  const isDiscounted = originalPriceMin != null && originalPriceMin > priceMin;
+  // Key shoppers compare deals by percentage, so the badge shows it instead of
+  // a generic "Sale" label.
+  const discountPercent = isDiscounted
+    ? Math.round(((originalPriceMin - priceMin) / originalPriceMin) * 100)
+    : 0;
   const isList = variant === "list";
 
   const media = (
@@ -56,9 +61,22 @@ function ProductCard({ product, variant = "grid" }) {
       className={`product-card__media sf-media sf-media-zoom rounded ${isList ? "sf-ratio-3x4" : "sf-ratio-4x3"}`}
     >
       <img src={image.url} alt={image.alt} loading="lazy" />
-      {isDiscounted ? <span className="product-card__badge">Sale</span> : null}
+      {isDiscounted ? <span className="product-card__badge">-{discountPercent}%</span> : null}
       {!inStock ? <span className="product-card__sold-out">Sold out</span> : null}
     </Link>
+  );
+
+  // Every variant shows the same details in the same order: platforms, name,
+  // rating, then price and action. Shoppers find each one in the same place
+  // whichever card they are looking at.
+  const platformList = (
+    <ul className="product-card__platforms list-unstyled d-flex flex-wrap gap-1 mb-0">
+      {platforms.map((platform) => (
+        <li key={platform.slug} className="product-card__platform rounded-1">
+          {platform.name}
+        </li>
+      ))}
+    </ul>
   );
 
   const price = (
@@ -72,11 +90,83 @@ function ProductCard({ product, variant = "grid" }) {
     </p>
   );
 
+  // The button shows either its label or its icon, never both: the label where
+  // the card has room, the icon when a container query finds it too narrow.
+  // `aria-label` keeps the button named either way and `title` shows the
+  // wording on hover.
+  const actionLabel = hasVariants ? "Select options" : "Add to cart";
   const action = (
-    <Button as={Link} to={href} variant="secondary" size="sm" disabled={!inStock}>
-      {hasVariants ? "Select options" : "Add to cart"}
+    <Button
+      as={Link}
+      to={href}
+      variant="secondary"
+      size="sm"
+      disabled={!inStock}
+      className="product-card__action"
+      aria-label={actionLabel}
+      title={actionLabel}
+    >
+      <Icon
+        name={hasVariants ? "options" : "cart-plus"}
+        size={18}
+        className="product-card__action-icon"
+      />
+      <span className="product-card__action-label">{actionLabel}</span>
     </Button>
   );
+
+  // Hero-style tile: artwork fills the card and the details sit on a gradient
+  // over its lower edge, so one deal can anchor a section.
+  if (variant === "featured") {
+    return (
+      <article className="product-card product-card--featured sf-media sf-media-zoom rounded h-100">
+        <img src={image.url} alt={image.alt} loading="lazy" />
+        {isDiscounted ? <span className="product-card__badge">-{discountPercent}%</span> : null}
+        <div className="product-card__overlay">
+          <div className="mb-2">{platformList}</div>
+          <h3 className="product-card__title product-card__title--lg">
+            <Link to={href}>{name}</Link>
+          </h3>
+          <div className="d-flex align-items-end justify-content-between gap-3 flex-wrap">
+            {price}
+            {action}
+          </div>
+        </div>
+      </article>
+    );
+  }
+
+  // Leaderboard row: the artwork beside a column of details. The name is its
+  // own grid item, apart from the rating, price and action, so it is never
+  // squeezed by them and may wrap as far as it needs. The grid sits in an inner
+  // wrapper because a container query can restyle only the card's descendants.
+  if (variant === "rank") {
+    return (
+      <article className="product-card product-card--rank">
+        <div className="product-card__rank-grid">
+          <div className="product-card__rank-platforms">{platformList}</div>
+          {/* Names wrap rather than truncate when even a full line is too
+              short: a cut-off game title is hard to recognise. */}
+          <h3 className="product-card__title product-card__rank-title">
+            <Link to={href}>{name}</Link>
+          </h3>
+          <Link
+            to={href}
+            className="product-card__media sf-media sf-media-zoom rounded sf-ratio-3x4"
+          >
+            <img src={image.url} alt={image.alt} loading="lazy" />
+          </Link>
+          <div className="product-card__rank-meta">
+            <Rating value={ratingAverage} count={ratingCount} showCount={false} />
+            {price}
+          </div>
+          {/* Its own grid cell, pinned to the card's bottom-right corner, so it
+              sits in the same place however long the name is. */}
+          <div className="product-card__rank-action">{action}</div>
+        </div>
+      </article>
+    );
+  }
 
   if (isList) {
     return (
@@ -84,12 +174,17 @@ function ProductCard({ product, variant = "grid" }) {
         <Row className="g-3">
           <Col xs={4}>{media}</Col>
           <Col xs={8} className="d-flex flex-column align-items-start gap-2">
+            {platformList}
             <h3 className="product-card__title mb-0">
               <Link to={href}>{name}</Link>
             </h3>
             <Rating value={ratingAverage} count={ratingCount} showCount={false} />
-            {price}
-            {action}
+            {/* Wraps as a unit: when the labelled button does not fit beside the
+                price it drops below it instead of overflowing the card. */}
+            <div className="product-card__list-buy">
+              {price}
+              {action}
+            </div>
           </Col>
         </Row>
       </article>
@@ -101,13 +196,7 @@ function ProductCard({ product, variant = "grid" }) {
       {media}
 
       <div className="product-card__body d-flex flex-column flex-grow-1">
-        <ul className="product-card__platforms list-unstyled d-flex flex-wrap gap-1 mb-2">
-          {platforms.map((platform) => (
-            <li key={platform.slug} className="product-card__platform rounded-1">
-              {platform.name}
-            </li>
-          ))}
-        </ul>
+        <div className="mb-2">{platformList}</div>
 
         <h3 className="product-card__title">
           <Link to={href}>{name}</Link>
@@ -115,7 +204,9 @@ function ProductCard({ product, variant = "grid" }) {
 
         <Rating value={ratingAverage} count={ratingCount} />
 
-        <div className="product-card__footer mt-auto d-flex align-items-center justify-content-between gap-2">
+        {/* Bottom-aligned: a price that wraps onto two lines grows upwards
+            and the button stays in the card's bottom-right corner. */}
+        <div className="product-card__footer mt-auto d-flex align-items-end justify-content-between gap-2">
           {price}
           {action}
         </div>

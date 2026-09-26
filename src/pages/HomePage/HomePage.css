@@ -1,5 +1,7 @@
+/* Top padding equals the gap between sections (Bootstrap `mb-5` = 3rem), so
+   the first block sits the same distance from the hero as from its neighbour. */
 .home-page {
-  padding-block: 3.5rem 5rem;
+  padding-block: 3rem 5rem;
 }
 
 /* The sidebar follows the taller content column, so it sticks below the header

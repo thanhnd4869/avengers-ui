@@ -1,0 +1,43 @@
+.trust-bar {
+  background-color: var(--sf-bg-elevated);
+  overflow: hidden;
+}
+
+/* Hairlines between items instead of gaps keep the bar reading as one strip. */
+.trust-bar__item + .trust-bar__item {
+  border-left: 1px solid var(--sf-border);
+}
+
+@media (max-width: 991.98px) {
+  .trust-bar__item:nth-child(3) {
+    border-left: 0;
+  }
+
+  .trust-bar__item:nth-child(n + 3) {
+    border-top: 1px solid var(--sf-border);
+  }
+}
+
+.trust-bar__icon {
+  display: grid;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  background-color: rgba(221, 22, 59, 0.12);
+  color: var(--sf-accent);
+}
+
+.trust-bar__title {
+  color: var(--sf-text-strong);
+  font-family: var(--sf-font-heading);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.trust-bar__text {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}

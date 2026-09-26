@@ -50,3 +50,30 @@
 .section-heading__highlight {
   color: var(--sf-accent);
 }
+
+/* Laying the row out as flex stops the heading rule short of the link instead
+   of running underneath it. */
+.section-heading-row {
+  display: flex;
+  align-items: center;
+}
+
+.section-heading-row .section-heading {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.section-heading__all {
+  flex: 0 0 auto;
+  /* Matches the heading margin so both sit on the same optical line. */
+  margin: 0 0 2.1875rem 1.25rem;
+  color: var(--sf-text-muted);
+  font: 700 0.7rem var(--sf-font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.section-heading__all:hover {
+  color: var(--sf-accent);
+}

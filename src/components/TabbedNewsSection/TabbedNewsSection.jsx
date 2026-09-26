@@ -5,6 +5,7 @@ import PostCard from "@components/PostCard";
 import SectionHeading from "@components/SectionHeading";
 import TabFilter from "@components/TabFilter";
 import useAsync from "@hooks/useAsync";
+import { PATHS } from "@routes/paths";
 import { getPostCategories, getPosts } from "@services/postService";
 
 const ALL = "all";
@@ -25,9 +26,15 @@ function TabbedNewsSection() {
     ...(categories.data?.data ?? []).map((item) => ({ value: item.slug, label: item.name })),
   ];
 
+  // "View all" follows the selected tab, so it opens the full list for the
+  // category the visitor is already looking at.
+  const viewAllTo = category === ALL ? PATHS.BLOG : `${PATHS.BLOG}?category=${category}`;
+
   return (
     <section className="mb-5">
-      <SectionHeading highlight="Tabbed">News</SectionHeading>
+      <SectionHeading highlight="Tabbed" viewAllTo={viewAllTo}>
+        News
+      </SectionHeading>
 
       <TabFilter items={tabs} value={category} onChange={setCategory} className="mb-4" />
 

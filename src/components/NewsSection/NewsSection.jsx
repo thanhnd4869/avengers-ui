@@ -6,6 +6,7 @@ import NewsBox from "@components/NewsBox";
 import PostCard from "@components/PostCard";
 import SectionHeading from "@components/SectionHeading";
 import useAsync from "@hooks/useAsync";
+import { PATHS } from "@routes/paths";
 import { getPosts } from "@services/postService";
 
 import "./NewsSection.css";
@@ -26,7 +27,9 @@ function NewsSection() {
 
   return (
     <section className="news-section mb-5">
-      <SectionHeading highlight="Latest">News</SectionHeading>
+      <SectionHeading highlight="Latest" viewAllTo={PATHS.BLOG}>
+        News
+      </SectionHeading>
 
       {posts.isLoading ? (
         <>

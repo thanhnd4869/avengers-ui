@@ -1,26 +1,97 @@
-/* Laying the row out as flex stops the heading rule short of the link instead
-   of running underneath it. */
-.product-section__heading-row {
-  display: flex;
-  align-items: center;
+/* 2x2 block beside the featured tile; equal rows keep every card the same height. */
+.product-section__quad {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
 }
 
-.product-section__heading-row .section-heading {
+/*
+ * Horizontal strip with scroll snapping. The slide width is chosen so the last
+ * visible card is cut off, which signals there is more to scroll to.
+ */
+.product-section__carousel {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sf-bg-raised) transparent;
+}
+
+.product-section__slide {
+  flex: 0 0 min(15.5rem, 70vw);
+  scroll-snap-align: start;
+}
+
+/*
+ * Leaderboard: one column on small screens, two from lg up. `grid-auto-flow:
+ * column` fills each column top to bottom, so ranks read down then across.
+ */
+.product-section__ranked {
+  display: grid;
+  gap: 1rem 1.5rem;
+  /* An explicit track stops the single column from growing to fit content. */
+  grid-template-columns: minmax(0, 1fr);
+  /* Equal rows, so a title or tag that wraps cannot make one row taller. */
+  grid-auto-rows: 1fr;
+}
+
+@media (min-width: 992px) {
+  .product-section__ranked {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rank-rows), 1fr);
+    grid-auto-flow: column;
+  }
+}
+
+/* Rows are equal height (`1fr`), so the card is stretched to fill its row box;
+   otherwise shorter rows would leave a gap under the artwork. */
+.product-section__rank-row {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  background-color: var(--sf-bg-elevated);
+}
+
+.product-section__rank-body {
+  display: flex;
   flex: 1 1 auto;
   min-width: 0;
 }
 
-.product-section__all {
-  flex: 0 0 auto;
-  /* Matches the heading margin so both sit on the same optical line. */
-  margin: 0 0 2.1875rem 1.25rem;
-  color: var(--sf-text-muted);
-  font: 700 0.7rem var(--sf-font-heading);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
+.product-section__rank-body > .product-card {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-.product-section__all:hover {
+.product-section__rank {
+  /* The row stretches its items; the number stays centred on it. */
+  align-self: center;
+  flex: 0 0 2.25rem;
+  color: var(--sf-text-muted);
+  font-family: var(--sf-font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/*
+ * The podium steps down through the accent: full strength for first, then two
+ * fainter tints, so the top three stand out and still read in order. Tints of
+ * the one accent keep the theme's red instead of adding gold, silver and bronze.
+ */
+.product-section__rank-row:nth-child(1) .product-section__rank {
   color: var(--sf-accent);
+}
+
+.product-section__rank-row:nth-child(2) .product-section__rank {
+  color: rgba(var(--bs-primary-rgb), 0.7);
+}
+
+.product-section__rank-row:nth-child(3) .product-section__rank {
+  color: rgba(var(--bs-primary-rgb), 0.45);
 }
