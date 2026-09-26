@@ -1,8 +1,8 @@
 .footer {
   position: relative;
+  /* Served from `public/`, so the URL is absolute and never bundled. */
   background:
-    url("https://wp.nkdev.info/squadforce/wp-content/uploads/2019/11/bg-top.png") center top / cover
-      no-repeat,
+    url("/assets/squadforce/footer-top.png") center top / cover no-repeat,
     #101319;
   padding-top: 8rem;
   margin-top: 0;
@@ -26,18 +26,23 @@
   background-color: var(--sf-accent);
 }
 
-.footer__input {
+/* Matches the button radius so the form reads as one set of controls. */
+.footer__input.form-control {
   background-color: var(--sf-bg-elevated);
   border-color: var(--sf-border);
-  border-radius: 0;
+  border-radius: var(--bs-btn-border-radius, 0.25rem);
   color: var(--sf-text-strong);
 }
 
-.footer__input:focus {
+.footer__input.form-control:focus {
   background-color: var(--sf-bg-elevated);
   border-color: var(--sf-accent);
   box-shadow: none;
   color: var(--sf-text-strong);
+}
+
+.footer__input.form-control::placeholder {
+  color: var(--sf-text-muted);
 }
 
 .footer__status {
@@ -67,7 +72,7 @@
 }
 
 .footer__social-link:hover {
-  background-color: var(--sf-accent);
+  background-color: var(--sf-social, var(--sf-accent));
   color: #fff;
 }
 

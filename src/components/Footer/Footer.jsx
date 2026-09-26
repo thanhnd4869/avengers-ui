@@ -7,48 +7,64 @@ import Row from "react-bootstrap/Row";
 import { Link } from "react-router";
 
 import Icon from "@components/Icon";
-import { APP_NAME } from "@constants/app";
+import { APP_NAME, SOCIAL_LINKS } from "@constants/app";
 import { PATHS } from "@routes/paths";
 import { sendContactMessage } from "@services/contactService";
 
 import "./Footer.css";
 
-const SOCIAL_LINKS = [
-  { label: "Facebook", icon: "facebook" },
-  { label: "Discord", icon: "discord" },
-  { label: "Twitch", icon: "twitch" },
-  { label: "YouTube", icon: "youtube" },
-  { label: "Steam", icon: "steam" },
+/*
+ * Buying a key raises questions about activation and refunds, so the footer
+ * links to those answers rather than repeating the shop categories already in
+ * the header navigation.
+ */
+const SUPPORT_LINKS = [
+  { label: "Help centre", to: PATHS.FAQ },
+  { label: "Refund policy", to: PATHS.REFUND_POLICY },
+  { label: "Terms of service", to: PATHS.TERMS },
+  { label: "Privacy policy", to: PATHS.PRIVACY },
 ];
 
-const SHOP_LINKS = [
-  { label: "All games", to: PATHS.SHOP },
-  { label: "PC keys", to: `${PATHS.SHOP}?platform=pc` },
-  { label: "PlayStation keys", to: `${PATHS.SHOP}?platform=ps5` },
-  { label: "Xbox keys", to: `${PATHS.SHOP}?platform=xbox` },
-];
+const EMPTY_FORM = { email: "", message: "" };
 
 function Footer() {
-  const [form, setForm] = useState({ email: "", message: "" });
+  const [form, setForm] = useState(EMPTY_FORM);
   const [status, setStatus] = useState({ state: "idle", message: "" });
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
     setForm((current) => ({ ...current, [name]: value }));
+    // Clearing as the visitor types stops a stale message from contradicting
+    // what is now in the field.
+    setFieldErrors((current) => (current[name] ? { ...current, [name]: undefined } : current));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setStatus({ state: "sending", message: "" });
+    setFieldErrors({});
 
     try {
       const response = await sendContactMessage(form);
 
       setStatus({ state: "success", message: response.data.message });
-      setForm({ email: "", message: "" });
+      setForm(EMPTY_FORM);
     } catch (error) {
-      setStatus({ state: "error", message: error.message });
+      // The API reports which field failed, so those messages sit next to the
+      // input instead of only appearing as one line under the button.
+      const byField = Object.fromEntries(
+        (error.details ?? [])
+          .filter((detail) => detail.field)
+          .map((detail) => [detail.field, detail.message]),
+      );
+
+      setFieldErrors(byField);
+      setStatus({
+        state: "error",
+        message: Object.keys(byField).length ? "Please check the fields above." : error.message,
+      });
     }
   };
 
@@ -69,7 +85,9 @@ function Footer() {
                   placeholder="Email *"
                   required
                   className="footer__input"
+                  isInvalid={Boolean(fieldErrors.email)}
                 />
+                <Form.Control.Feedback type="invalid">{fieldErrors.email}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="footer-message">
                 <Form.Label className="visually-hidden">Message</Form.Label>
@@ -82,7 +100,9 @@ function Footer() {
                   placeholder="Message *"
                   required
                   className="footer__input"
+                  isInvalid={Boolean(fieldErrors.message)}
                 />
+                <Form.Control.Feedback type="invalid">{fieldErrors.message}</Form.Control.Feedback>
               </Form.Group>
               <Button type="submit" variant="primary" disabled={status.state === "sending"}>
                 {status.state === "sending" ? "Sending..." : "Submit"}
@@ -99,9 +119,9 @@ function Footer() {
           </Col>
 
           <Col lg={3}>
-            <h4 className="footer__heading">Shop</h4>
+            <h4 className="footer__heading">Support</h4>
             <ul className="footer__links list-unstyled">
-              {SHOP_LINKS.map((link) => (
+              {SUPPORT_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link to={link.to} className="sf-link-muted">
                     {link.label}
@@ -120,7 +140,12 @@ function Footer() {
             <ul className="footer__social list-unstyled d-flex gap-3 mb-0">
               {SOCIAL_LINKS.map((social) => (
                 <li key={social.label}>
-                  <a href="#" aria-label={social.label} className="footer__social-link">
+                  <a
+                    href={social.href}
+                    aria-label={social.label}
+                    className="footer__social-link"
+                    data-social={social.icon}
+                  >
                     <Icon name={social.icon} />
                   </a>
                 </li>

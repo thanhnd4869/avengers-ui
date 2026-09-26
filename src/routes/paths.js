@@ -13,6 +13,10 @@ export const PATHS = Object.freeze({
   BLOG: "/blog",
   POST: "/blog/:slug",
   GALLERY: "/gallery",
+  FAQ: "/faq",
+  REFUND_POLICY: "/refund-policy",
+  TERMS: "/terms",
+  PRIVACY: "/privacy",
   NOT_FOUND: "/not-found",
 });
 

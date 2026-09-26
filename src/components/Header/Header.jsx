@@ -5,7 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { Link, NavLink } from "react-router";
 
 import Icon from "@components/Icon";
-import { APP_NAME } from "@constants/app";
+import { APP_NAME, SOCIAL_LINKS } from "@constants/app";
 import { PATHS } from "@routes/paths";
 
 import "./Header.css";
@@ -15,13 +15,6 @@ const NAV_ITEMS = [
   { label: "Shop", to: PATHS.SHOP },
   { label: "Blog", to: PATHS.BLOG },
   { label: "Gallery", to: PATHS.GALLERY },
-];
-
-const SOCIAL_LINKS = [
-  { label: "Facebook", icon: "facebook", href: "#" },
-  { label: "Discord", icon: "discord", href: "#" },
-  { label: "Twitch", icon: "twitch", href: "#" },
-  { label: "YouTube", icon: "youtube", href: "#" },
 ];
 
 function Header() {
