@@ -2,7 +2,7 @@ import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 
 import Icon from "@components/Icon";
 import { APP_NAME } from "@constants/app";
@@ -21,6 +21,12 @@ const NAV_ITEMS = [
 
 function Header() {
   const [expanded, setExpanded] = useState(false);
+  const location = useLocation();
+  // Brings the visitor back to the page they were on once signed in.
+  const isAuthPage = [PATHS.LOGIN, PATHS.REGISTER].includes(location.pathname);
+  const loginTo = isAuthPage
+    ? PATHS.LOGIN
+    : `${PATHS.LOGIN}?redirect=${encodeURIComponent(location.pathname + location.search)}`;
   const socials = useAsync(() => getSocialLinks(), []);
   const socialLinks = socials.error ? [] : (socials.data?.data ?? []);
 
@@ -31,7 +37,12 @@ function Header() {
           <ul className="header__social list-unstyled d-flex gap-3 mb-0">
             {socialLinks.map((social) => (
               <li key={social.id}>
-                <a href={social.url} aria-label={social.label} className="sf-link-muted">
+                <a
+                  href={social.url}
+                  aria-label={social.label}
+                  className="sf-link-muted"
+                  data-social={social.network}
+                >
                   <Icon name={social.network} />
                 </a>
               </li>
@@ -41,9 +52,9 @@ function Header() {
             <button type="button" className="header__icon-button" aria-label="Search">
               <Icon name="search" />
             </button>
-            <button type="button" className="header__icon-button" aria-label="Login">
+            <Link to={loginTo} className="header__icon-button" aria-label="Sign in">
               <Icon name="login" />
-            </button>
+            </Link>
             <Link to={PATHS.CART} className="header__icon-button" aria-label="Cart">
               <Icon name="cart" />
               <span className="header__cart-count">0</span>

@@ -1,0 +1,188 @@
+.auth-page {
+  padding-block: 4rem 6rem;
+}
+
+.auth-page__grid {
+  display: grid;
+  gap: 2rem;
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 992px) {
+  .auth-page__grid {
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    max-width: none;
+    align-items: stretch;
+  }
+}
+
+.auth-card {
+  background-color: var(--sf-bg-elevated);
+  border: 1px solid var(--sf-border);
+  border-top: 3px solid var(--sf-accent);
+  padding: 2.5rem 2rem;
+}
+
+@media (max-width: 575.98px) {
+  .auth-card {
+    padding: 2rem 1.25rem;
+  }
+}
+
+.auth-card__title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-card__subtitle {
+  margin-bottom: 2rem;
+}
+
+.auth-card__alert {
+  font-size: 0.8125rem;
+}
+
+.auth-card__footer {
+  margin: 2rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--sf-border);
+  text-align: center;
+}
+
+.auth-card__footer a,
+.auth-card a.auth-link {
+  color: var(--sf-accent);
+  font-weight: 600;
+}
+
+.auth-card__footer a:hover,
+.auth-card a.auth-link:hover {
+  color: var(--sf-text-strong);
+}
+
+.auth-card .form-label {
+  color: var(--sf-text-strong);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.auth-input.form-control {
+  background-color: var(--sf-bg-sunken);
+  border-color: var(--sf-border);
+  color: var(--sf-text-strong);
+  padding-block: 0.65rem;
+}
+
+.auth-input.form-control:focus {
+  background-color: var(--sf-bg-sunken);
+  border-color: var(--sf-accent);
+  box-shadow: none;
+  color: var(--sf-text-strong);
+}
+
+/* The themed border above outranks Bootstrap's invalid state, so the red
+   border is restored for fields that failed validation. */
+.auth-input.form-control.is-invalid,
+.auth-input.form-control.is-invalid:focus {
+  border-color: var(--bs-form-invalid-border-color);
+}
+
+.auth-input.form-control::placeholder {
+  color: var(--sf-text-muted);
+}
+
+.auth-password {
+  position: relative;
+}
+
+/* Room on the right for the toggle, so long passwords never run under it.
+   Bootstrap's invalid icon would sit in the same spot, so it is dropped; the
+   red border and the message below already mark the error. */
+.auth-input--password.form-control,
+.auth-input--password.form-control.is-invalid {
+  padding-right: 2.75rem;
+  background-image: none;
+}
+
+.auth-password__toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--bs-border-radius);
+  color: var(--sf-text-muted);
+  transform: translateY(-50%);
+  transition: color 0.2s ease-in-out;
+}
+
+.auth-password__toggle:hover,
+.auth-password__toggle:focus-visible {
+  color: var(--sf-text-strong);
+}
+
+.auth-password__toggle:focus-visible {
+  outline: 2px solid var(--sf-accent);
+  outline-offset: 0;
+}
+
+.auth-hint.form-text {
+  color: var(--sf-text-muted);
+  font-size: 0.75rem;
+}
+
+.auth-card .form-check-input {
+  background-color: var(--sf-bg-sunken);
+  border-color: var(--sf-border);
+}
+
+.auth-card .form-check-input:checked {
+  background-color: var(--sf-accent);
+  border-color: var(--sf-accent);
+}
+
+.auth-card .form-check-input:focus {
+  border-color: var(--sf-accent);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.auth-benefits {
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem;
+  background:
+    linear-gradient(135deg, rgba(221, 22, 59, 0.18), transparent 60%), var(--sf-bg-sunken);
+  border: 1px solid var(--sf-border);
+  border-radius: var(--bs-border-radius);
+}
+
+.auth-benefits__title {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.auth-benefits__item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--sf-text-strong);
+}
+
+.auth-benefits__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background-color: var(--sf-accent);
+  color: #fff;
+  border-radius: var(--bs-border-radius);
+}
