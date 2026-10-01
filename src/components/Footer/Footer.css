@@ -71,8 +71,10 @@
     color 0.2s ease-in-out;
 }
 
+/* `background` rather than `background-color`, because some brands (Instagram,
+   Steam) are a gradient. */
 .footer__social-link:hover {
-  background-color: var(--sf-social, var(--sf-accent));
+  background: var(--sf-social-bg, var(--sf-accent));
   color: #fff;
 }
 

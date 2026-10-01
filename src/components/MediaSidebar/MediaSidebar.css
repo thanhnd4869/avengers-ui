@@ -36,9 +36,10 @@
 }
 
 /* Hovering reveals each network's own brand colour, keyed off the icon name the
-   API returns. */
+   API returns. `background` rather than `background-color`, because some brands
+   (Instagram, Steam) are a gradient. */
 .media-sidebar__socials a:hover {
-  background-color: var(--sf-social, var(--sf-accent));
+  background: var(--sf-social-bg, var(--sf-accent));
   color: var(--sf-text-strong);
 }
 

@@ -40,8 +40,9 @@
   display: block;
 }
 
+/* The top bar has no tiles, so the brand colour goes on the icon itself. */
 .header__social a:hover {
-  color: var(--sf-accent);
+  color: var(--sf-social, var(--sf-accent));
 }
 
 .header__icon-button {

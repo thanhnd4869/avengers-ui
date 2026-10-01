@@ -148,19 +148,37 @@ a {
 }
 
 /*
- * Brand colours for social links, set as a custom property so any component can
- * decide where to apply it (background here, text colour elsewhere).
+ * Brand colours for social links, keyed off `data-social`.
+ *
+ * `--sf-social` is a single colour, usable as an icon colour.
+ * `--sf-social-bg` is what a tile is painted with. It only differs where the
+ * brand's mark is a gradient rather than one colour, since a gradient cannot
+ * colour an SVG icon but can fill a background.
  */
+[data-social] {
+  --sf-social-bg: var(--sf-social);
+}
+
 [data-social="facebook"] {
-  --sf-social: #3b5998;
+  --sf-social: #0866ff;
 }
 
 [data-social="twitter"] {
-  --sf-social: #00b6f1;
+  --sf-social: #1da1f2;
 }
 
 [data-social="instagram"] {
-  --sf-social: #527198;
+  --sf-social: #e1306c;
+  /* The app icon's gradient: yellow in the lower left through orange and
+     magenta to purple in the upper right. */
+  --sf-social-bg: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  );
 }
 
 [data-social="youtube"] {
@@ -168,20 +186,24 @@ a {
 }
 
 [data-social="twitch"] {
-  --sf-social: #5c43a1;
+  --sf-social: #9146ff;
 }
 
 [data-social="google"],
 [data-social="google-plus"] {
-  --sf-social: #df4a32;
+  --sf-social: #db4437;
 }
 
 [data-social="rss"] {
-  --sf-social: #e06618;
+  --sf-social: #f26522;
 }
 
+/* Steam's own colours are a near-black navy, which would barely show against
+   this dark theme as an icon colour, so the icon takes its store blue while
+   the tile keeps the navy gradient of the client. */
 [data-social="steam"] {
-  --sf-social: #272425;
+  --sf-social: #66c0f4;
+  --sf-social-bg: linear-gradient(135deg, #171a21 0%, #1b2838 50%, #2a475e 100%);
 }
 
 [data-social="discord"] {
