@@ -34,16 +34,16 @@ function GalleryGrid({ items, isLoading, count = 6, span = 4, gutter = "g-2" }) 
         const thumb = <img src={item.image.url} alt={item.image.alt} loading="lazy" />;
         // Screenshots may point at a full-size image on another host, which the
         // router cannot navigate to, so those stay plain anchors.
-        const isExternal = /^https?:\/\//.test(item.linkUrl ?? "");
+        const isExternal = /^https?:\/\//.test(item.url ?? "");
 
         return (
           <Col key={item.id} xs={span}>
             {isExternal ? (
-              <a href={item.linkUrl} className={TILE_CLASS} target="_blank" rel="noreferrer">
+              <a href={item.url} className={TILE_CLASS} target="_blank" rel="noreferrer">
                 {thumb}
               </a>
             ) : (
-              <Link to={item.linkUrl ?? PATHS.GALLERY} className={TILE_CLASS}>
+              <Link to={item.url ?? PATHS.GALLERY} className={TILE_CLASS}>
                 {thumb}
               </Link>
             )}

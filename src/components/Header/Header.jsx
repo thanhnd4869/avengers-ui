@@ -5,8 +5,10 @@ import Navbar from "react-bootstrap/Navbar";
 import { Link, NavLink } from "react-router";
 
 import Icon from "@components/Icon";
-import { APP_NAME, SOCIAL_LINKS } from "@constants/app";
+import { APP_NAME } from "@constants/app";
+import useAsync from "@hooks/useAsync";
 import { PATHS } from "@routes/paths";
+import { getSocialLinks } from "@services/socialLinkService";
 
 import "./Header.css";
 
@@ -19,16 +21,18 @@ const NAV_ITEMS = [
 
 function Header() {
   const [expanded, setExpanded] = useState(false);
+  const socials = useAsync(() => getSocialLinks(), []);
+  const socialLinks = socials.error ? [] : (socials.data?.data ?? []);
 
   return (
     <header className="header">
       <div className="header__topbar d-none d-lg-block">
         <Container className="d-flex align-items-center justify-content-between">
           <ul className="header__social list-unstyled d-flex gap-3 mb-0">
-            {SOCIAL_LINKS.map((social) => (
-              <li key={social.label}>
-                <a href={social.href} aria-label={social.label} className="sf-link-muted">
-                  <Icon name={social.icon} />
+            {socialLinks.map((social) => (
+              <li key={social.id}>
+                <a href={social.url} aria-label={social.label} className="sf-link-muted">
+                  <Icon name={social.network} />
                 </a>
               </li>
             ))}

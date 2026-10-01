@@ -15,17 +15,3 @@ const readEnv = (value, fallback) => (typeof value === "string" && value ? value
 export const APP_NAME = readEnv(process.env.WEBPACK_APP_NAME, "Avengers UI");
 
 export const API_URL = readEnv(process.env.WEBPACK_API_URL, "http://localhost:8000/api/v1");
-
-/**
- * Official social accounts, listed in the header bar and the footer.
- *
- * `icon` doubles as the `data-social` value the theme keys brand colours off, so
- * it has to match a name in the `Icon` map.
- */
-export const SOCIAL_LINKS = Object.freeze([
-  { label: "Facebook", icon: "facebook", href: "#" },
-  { label: "Discord", icon: "discord", href: "#" },
-  { label: "Twitch", icon: "twitch", href: "#" },
-  { label: "YouTube", icon: "youtube", href: "#" },
-  { label: "Steam", icon: "steam", href: "#" },
-]);

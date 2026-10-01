@@ -1,11 +1,12 @@
 import GalleryGrid from "@components/GalleryGrid";
 import SectionHeading from "@components/SectionHeading";
 import useAsync from "@hooks/useAsync";
-import { getHomeMedia } from "@services/homeMediaService";
+import { getMedia } from "@services/mediaService";
 
 function GallerySection() {
-  const { data, isLoading, error } = useAsync(() => getHomeMedia(), []);
-  const screenshots = data?.data?.screenshots ?? [];
+  // Same request as the sidebar widget, so both share one response.
+  const { data, isLoading, error } = useAsync(() => getMedia({ type: "screenshot", limit: 6 }), []);
+  const screenshots = data?.data ?? [];
 
   if (error || (!isLoading && !screenshots.length)) {
     return null;

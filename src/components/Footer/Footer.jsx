@@ -7,9 +7,11 @@ import Row from "react-bootstrap/Row";
 import { Link } from "react-router";
 
 import Icon from "@components/Icon";
-import { APP_NAME, SOCIAL_LINKS } from "@constants/app";
+import { APP_NAME } from "@constants/app";
+import useAsync from "@hooks/useAsync";
 import { PATHS } from "@routes/paths";
 import { sendContactMessage } from "@services/contactService";
+import { getSocialLinks } from "@services/socialLinkService";
 
 import "./Footer.css";
 
@@ -31,6 +33,8 @@ function Footer() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [status, setStatus] = useState({ state: "idle", message: "" });
   const [fieldErrors, setFieldErrors] = useState({});
+  const socials = useAsync(() => getSocialLinks(), []);
+  const socialLinks = socials.error ? [] : (socials.data?.data ?? []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -138,15 +142,15 @@ function Footer() {
               distributors and activates on the official platform store.
             </p>
             <ul className="footer__social list-unstyled d-flex gap-3 mb-0">
-              {SOCIAL_LINKS.map((social) => (
-                <li key={social.label}>
+              {socialLinks.map((social) => (
+                <li key={social.id}>
                   <a
-                    href={social.href}
+                    href={social.url}
                     aria-label={social.label}
                     className="footer__social-link"
-                    data-social={social.icon}
+                    data-social={social.network}
                   >
-                    <Icon name={social.icon} />
+                    <Icon name={social.network} />
                   </a>
                 </li>
               ))}

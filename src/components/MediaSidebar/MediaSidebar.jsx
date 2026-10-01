@@ -9,8 +9,9 @@ import ProductCard from "@components/ProductCard";
 import Widget from "@components/Widget";
 import useAsync from "@hooks/useAsync";
 import { PATHS } from "@routes/paths";
-import { getHomeMedia } from "@services/homeMediaService";
+import { getMedia } from "@services/mediaService";
 import { getProducts } from "@services/productService";
+import { getSocialLinks } from "@services/socialLinkService";
 
 import "./MediaSidebar.css";
 
@@ -23,18 +24,19 @@ const POPULAR_LIMIT = 3;
  * composition rather than new styling.
  */
 function MediaSidebar() {
-  const media = useAsync(() => getHomeMedia(), []);
-  // The API sorts products by `-sales` or `-rating`. Using the rating here keeps
-  // this widget from repeating the best sellers listed in the content column.
+  const socials = useAsync(() => getSocialLinks(), []);
+  const videos = useAsync(() => getMedia({ type: "video", limit: 1 }), []);
+  const shots = useAsync(() => getMedia({ type: "screenshot", limit: 6 }), []);
+  // Sorting by rating keeps this widget from repeating the best sellers listed
+  // in the content column.
   const popularProducts = useAsync(
     () => getProducts({ sort: "-rating", limit: POPULAR_LIMIT }),
     [],
   );
 
-  const content = media.error ? null : media.data?.data;
-  const socialLinks = content?.socialLinks ?? [];
-  const latestVideo = content?.latestVideo;
-  const screenshots = content?.screenshots ?? [];
+  const socialLinks = socials.error ? [] : (socials.data?.data ?? []);
+  const latestVideo = videos.error ? null : videos.data?.data[0];
+  const screenshots = shots.error ? [] : (shots.data?.data ?? []);
   const products = popularProducts.error ? [] : (popularProducts.data?.data ?? []);
 
   return (
@@ -57,9 +59,9 @@ function MediaSidebar() {
         <Widget title="We Are Social" bodyClassName="p-0">
           <ul className="media-sidebar__socials list-unstyled mb-0">
             {socialLinks.map((social) => (
-              <li key={social.id ?? social.name}>
-                <a href={social.url} aria-label={social.label} data-social={social.name}>
-                  <Icon name={social.name} size={18} />
+              <li key={social.id}>
+                <a href={social.url} aria-label={social.label} data-social={social.network}>
+                  <Icon name={social.network} size={18} />
                 </a>
               </li>
             ))}
