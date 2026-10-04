@@ -5,13 +5,13 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 
 import AuthLayout from "@components/AuthLayout";
 import PasswordField from "@components/PasswordField";
+import useAuth from "@hooks/useAuth";
 import { PATHS } from "@routes/paths";
-import { register } from "@services/authService";
 import {
   apiFieldErrors,
   apiFormError,
   collectErrors,
-  PASSWORD_MIN_LENGTH,
+  PASSWORD_HINT,
   safeRedirect,
   validateDisplayName,
   validateEmail,
@@ -38,6 +38,7 @@ function validate(form) {
 
 export function Component() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [searchParams] = useSearchParams();
   const redirectTo = safeRedirect(searchParams.get("redirect"), PATHS.HOME);
 
@@ -75,11 +76,13 @@ export function Component() {
       const byField = apiFieldErrors(error);
 
       setErrors(byField);
+      // A taken email comes back as an `email` field error, so it is only
+      // shown above the form when the API did not name the field.
       setFormError(
-        error.status === 409
-          ? "An account with this email already exists."
-          : Object.keys(byField).length
-            ? ""
+        Object.keys(byField).length
+          ? ""
+          : error.status === 409
+            ? "An account with this email already exists."
             : apiFormError(error),
       );
     } finally {
@@ -145,7 +148,7 @@ export function Component() {
           onChange={handleChange}
           autoComplete="new-password"
           error={errors.password}
-          hint={`At least ${PASSWORD_MIN_LENGTH} characters, with a letter and a number.`}
+          hint={PASSWORD_HINT}
           required
         />
 

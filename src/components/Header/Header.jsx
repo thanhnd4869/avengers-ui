@@ -2,11 +2,12 @@ import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { Link, NavLink, useLocation } from "react-router";
+import { Link, NavLink, useLocation, useNavigate } from "react-router";
 
 import Icon from "@components/Icon";
 import { APP_NAME } from "@constants/app";
 import useAsync from "@hooks/useAsync";
+import useAuth from "@hooks/useAuth";
 import { PATHS } from "@routes/paths";
 import { getSocialLinks } from "@services/socialLinkService";
 
@@ -22,8 +23,16 @@ const NAV_ITEMS = [
 function Header() {
   const [expanded, setExpanded] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAdmin, logout } = useAuth();
   // Brings the visitor back to the page they were on once signed in.
   const isAuthPage = [PATHS.LOGIN, PATHS.REGISTER].includes(location.pathname);
+
+  const handleLogout = async () => {
+    // Signed out locally even if the server cannot be reached.
+    await logout().catch(() => {});
+    navigate(PATHS.HOME);
+  };
   const loginTo = isAuthPage
     ? PATHS.LOGIN
     : `${PATHS.LOGIN}?redirect=${encodeURIComponent(location.pathname + location.search)}`;
@@ -52,9 +61,32 @@ function Header() {
             <button type="button" className="header__icon-button" aria-label="Search">
               <Icon name="search" />
             </button>
-            <Link to={loginTo} className="header__icon-button" aria-label="Sign in">
-              <Icon name="login" />
-            </Link>
+            {user ? (
+              <>
+                <span className="header__user" title={user.email}>
+                  <Icon name="user" />
+                  {user.displayName}
+                </span>
+                {isAdmin ? (
+                  <Link to={PATHS.ADMIN} className="header__icon-button" aria-label="Admin">
+                    <Icon name="gauge" />
+                  </Link>
+                ) : null}
+                <button
+                  type="button"
+                  className="header__icon-button"
+                  aria-label="Sign out"
+                  title="Sign out"
+                  onClick={handleLogout}
+                >
+                  <Icon name="logout" />
+                </button>
+              </>
+            ) : (
+              <Link to={loginTo} className="header__icon-button" aria-label="Sign in">
+                <Icon name="login" />
+              </Link>
+            )}
             <Link to={PATHS.CART} className="header__icon-button" aria-label="Cart">
               <Icon name="cart" />
               <span className="header__cart-count">0</span>

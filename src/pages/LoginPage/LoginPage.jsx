@@ -5,8 +5,8 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 
 import AuthLayout from "@components/AuthLayout";
 import PasswordField from "@components/PasswordField";
+import useAuth from "@hooks/useAuth";
 import { PATHS } from "@routes/paths";
-import { login } from "@services/authService";
 import {
   apiFieldErrors,
   apiFormError,
@@ -19,6 +19,7 @@ const EMPTY_FORM = { email: "", password: "", remember: false };
 
 export function Component() {
   const navigate = useNavigate();
+  const { login, notice } = useAuth();
   const [searchParams] = useSearchParams();
   const redirectTo = safeRedirect(searchParams.get("redirect"), PATHS.HOME);
 
@@ -79,7 +80,7 @@ export function Component() {
       highlight="Sign"
       title="in"
       subtitle="Welcome back. Sign in to see your keys and orders."
-      error={formError}
+      error={formError || notice}
       footer={
         <>
           New here? <Link to={registerTo}>Create an account</Link>

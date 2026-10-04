@@ -9,15 +9,18 @@ import {
   faEnvelopeOpenText,
   faEye,
   faEyeSlash,
+  faGauge,
   faHeadset,
   faKey,
   faLock,
   faMagnifyingGlass,
   faRss,
+  faRightFromBracket,
   faRightToBracket,
   faShieldHalved,
   faSliders,
   faStar,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faDiscord,
@@ -33,6 +36,9 @@ import {
 const ICONS = {
   search: faMagnifyingGlass,
   login: faRightToBracket,
+  logout: faRightFromBracket,
+  user: faUser,
+  gauge: faGauge,
   cart: faCartShopping,
   "cart-plus": faCartPlus,
   options: faSliders,

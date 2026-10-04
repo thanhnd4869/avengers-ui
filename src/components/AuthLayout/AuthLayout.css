@@ -148,6 +148,18 @@
   border-color: var(--sf-accent);
 }
 
+/* Bootstrap turns the whole label red when the box is invalid, which for the
+   terms checkbox colours a full sentence and hides its links. The red box and
+   the message below it already mark the error, so the label keeps its colour. */
+.auth-card .form-check-input.is-invalid ~ .form-check-label {
+  color: inherit;
+}
+
+/* The themed border above would otherwise hide the invalid state. */
+.auth-card .form-check-input.is-invalid {
+  border-color: var(--bs-form-invalid-border-color);
+}
+
 .auth-card .form-check-input:focus {
   border-color: var(--sf-accent);
   box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);

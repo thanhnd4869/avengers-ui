@@ -45,6 +45,14 @@
   color: var(--sf-social, var(--sf-accent));
 }
 
+.header__user {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--sf-text-strong);
+  font-weight: 600;
+}
+
 .header__icon-button {
   position: relative;
   background: none;
